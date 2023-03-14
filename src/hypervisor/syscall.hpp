@@ -19,7 +19,7 @@
 #ifndef SYSCALL_HPP
 #define SYSCALL_HPP
 
-#include "hypervisor/riscv.hpp"
+#include "riscv.hpp"
 
 /*
  * Process a system call from an application.

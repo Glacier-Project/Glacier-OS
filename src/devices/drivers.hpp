@@ -20,7 +20,8 @@
 #define DRIVERS_H
 
 #ifdef DEVICE_ANIMUS
-#include "devices/animus/fs.hpp"
+#include "animus/fs.hpp"
+#include "animus/clock.hpp"
 #endif
 
 #endif

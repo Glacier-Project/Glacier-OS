@@ -1,4 +1,5 @@
 # TODO
+Current goal: Developer preview 1
 
 ## App loader
 - Load the application into memory
@@ -8,6 +9,7 @@
 
 ## Documentation
 - Comment all code
+
 ### System Calls
 - Document system calls and their structure
 

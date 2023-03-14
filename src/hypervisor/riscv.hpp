@@ -24,6 +24,7 @@
 
 #ifndef RISCV_HPP
 #define RISCV_HPP
+
 #define XLEN 32
 
 #include <stdio.h>
@@ -37,6 +38,8 @@
 #include <unistd.h>
 #include <time.h>
 
+#include "../api.hpp"
+#include "syscall.hpp"
 
 // uncomment this for an instruction trace and other debug outputs
 //#define DEBUG_OUTPUT
@@ -1365,9 +1368,7 @@ void execute_instruction()
 // returns realtime in nanoseconds
 int64_t get_clock()
 {
-    struct timespec ts;
-    clock_gettime(CLOCK_MONOTONIC, &ts);
-    return ts.tv_sec * 1000000000LL + ts.tv_nsec;
+    return get_nanos();
 }
 
 

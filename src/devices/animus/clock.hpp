@@ -16,25 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "config.hpp"
+#ifndef FS_HPP
+#define FS_HPP
 
-#include "src/api.hpp"
-#include "src/devices/drivers.hpp"
-
-#include "src/hypervisor/app_loader.hpp"
-
-void setup() {
-
+int64_t get_nanos() {
+    return rp2040.getCycleCount64();
 }
 
-void loop() {
-
-}
-
-void setup1() {
-
-}
-
-void loop1() {
-
-}
+#endif

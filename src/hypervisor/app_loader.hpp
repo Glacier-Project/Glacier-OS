@@ -19,7 +19,7 @@
 #ifndef APP_LOADER_HPP
 #define APP_LOADER_HPP
 
-#include "hypervisor/riscv.hpp"
+#include "riscv.hpp"
 
 void load_application(const char* filename) {
 

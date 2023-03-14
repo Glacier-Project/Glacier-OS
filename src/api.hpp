@@ -72,4 +72,6 @@ void cellular_get_caller(char* buffer, int len);
 void cellular_get_text(char* sender_buffer, int sender_len, char* message_buffer, int message_len);
 int cellular_strength();
 
+// Clock functions
+int64_t get_nanos();
 #endif
