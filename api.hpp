@@ -42,5 +42,34 @@ int fs_size();
 void fs_read(char* buffer, int length);
 void fs_write(char* buffer, int length);
 
+// Display functions
+void display_init();
+void display_shutdown();
+int display_width();
+int display_height();
+void display_set_color(uint16_t color);
+void display_draw_pixel(int x, int y);
+void display_draw_line(int x1, int y1, int x2, int y2);
+void display_draw_rect(int x, int y, int width, int height);
+void display_fill_rect(int x, int y, int width, int height);
+void display_draw_circle(int x, int y, int r);
+void display_fill_circle(int x, int y, int r);
+void display_draw_bitmap(int x, int y, int width, int height, uint16_t data);
+void display_fill();
+void display_draw_string(int x, int y, char* text);
+
+// UI functions
+int ui_draw_menu(char** items, int item_list_len);
+
+// Communication functions
+bool cellular_available();
+void cellular_init();
+void cellular_shutdown();
+void cellular_get_imei(char* buffer, int len);
+void cellular_answer();
+void cellular_hang_up();
+void cellular_get_caller(char* buffer, int len);
+void cellular_get_text(char* sender_buffer, int sender_len, char* message_buffer, int message_len);
+int cellular_strength();
 
 #endif

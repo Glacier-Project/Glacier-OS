@@ -16,23 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "api.hpp"
-#include "devices/drivers.hpp"
+// Which device to build for
+#define DEVICE_ANIMUS
 
-#include "hypervisor/app_loader.hpp"
-
-void setup() {
-
-}
-
-void loop() {
-
-}
-
-void setup1() {
-
-}
-
-void loop1() {
-
-}
+// OS version
+#define VERSION_MAJOR 0
+#define VERSION_MINOR 0
+#define VERSION_PATCH 0
+#define API_VERSION 0
