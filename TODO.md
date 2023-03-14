@@ -17,7 +17,7 @@ Current goal: Developer preview 1
 ### Filesystem
 
 ### Display
-- Provide re-usable code (shapes + font rendering) in api.hpp
+- Provide re-usable code (shapes + font rendering) in api.hpp - maybe lift code from arcticOS?
 
 ### Communication
 - Mobile data
@@ -31,8 +31,9 @@ Current goal: Developer preview 1
 - Cellular data permission
 
 ### UI
-- Create menu UI
+- Create menu UI - maybe lift code from arcticOS?
 - Create way to let user cycle between UI items to select
+- Include font - probably m6x11 as it looks good at small sizes + decent at large ones
 
 ## Drivers (Animus)
 - Finish filesystem driver
