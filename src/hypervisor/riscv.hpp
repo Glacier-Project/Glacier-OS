@@ -81,7 +81,7 @@ uint32_t insn;
 uint32_t reg[32];
 
 uint8_t priv = PRV_M; /* see PRV_x */
-uint8_t fs; /* MSTATUS_FS value */
+uint8_t mstatus_fs; /* MSTATUS_FS value */
 uint8_t mxl; /* MXL field in MISA register */
 
 uint64_t insn_counter;
@@ -160,7 +160,7 @@ uint32_t load_res; /* for atomic LR/SC */
 #define MSTATUS_MPIE_SHIFT 7
 #define MSTATUS_SPP_SHIFT 8
 #define MSTATUS_MPP_SHIFT 11
-#define MSTATUS_FS_SHIFT 13
+#define MSTATUS_mstatus_fs_SHIFT 13
 #define MSTATUS_UXL_SHIFT 32
 #define MSTATUS_SXL_SHIFT 34
 
@@ -175,7 +175,7 @@ uint32_t load_res; /* for atomic LR/SC */
 #define MSTATUS_SPP (1 << MSTATUS_SPP_SHIFT)
 #define MSTATUS_HPP (3 << 9)
 #define MSTATUS_MPP (3 << MSTATUS_MPP_SHIFT)
-#define MSTATUS_FS (3 << MSTATUS_FS_SHIFT)
+#define MSTATUS_mstatus_fs (3 << MSTATUS_mstatus_fs_SHIFT)
 #define MSTATUS_XS (3 << 15)
 #define MSTATUS_MPRV (1 << 17)
 #define MSTATUS_SUM (1 << 18)
@@ -198,7 +198,7 @@ int ctz32(uint32_t a)
 #define SSTATUS_MASK0 (MSTATUS_UIE | MSTATUS_SIE |       \
                       MSTATUS_UPIE | MSTATUS_SPIE |     \
                       MSTATUS_SPP | \
-                      MSTATUS_FS | MSTATUS_XS | \
+                      MSTATUS_mstatus_fs | MSTATUS_XS | \
                       MSTATUS_SUM | MSTATUS_MXR)
 #define SSTATUS_MASK SSTATUS_MASK0
 
@@ -206,7 +206,7 @@ int ctz32(uint32_t a)
 #define MSTATUS_MASK (MSTATUS_UIE | MSTATUS_SIE | MSTATUS_MIE |      \
                       MSTATUS_UPIE | MSTATUS_SPIE | MSTATUS_MPIE |    \
                       MSTATUS_SPP | MSTATUS_MPP | \
-                      MSTATUS_FS | \
+                      MSTATUS_mstatus_fs | \
                       MSTATUS_MPRV | MSTATUS_SUM | MSTATUS_MXR)
 
 /* cycle and insn counters */
@@ -217,9 +217,9 @@ uint32_t get_mstatus(uint32_t mask)
 {
     uint32_t val;
     bool sd;
-    val = mstatus | (fs << MSTATUS_FS_SHIFT);
+    val = mstatus | (mstatus_fs << MSTATUS_mstatus_fs_SHIFT);
     val &= mask;
-    sd = ((val & MSTATUS_FS) == MSTATUS_FS) |
+    sd = ((val & MSTATUS_mstatus_fs) == MSTATUS_mstatus_fs) |
          ((val & MSTATUS_XS) == MSTATUS_XS);
     if (sd)
         val |= (uint32_t)1 << (XLEN - 1);
@@ -228,9 +228,9 @@ uint32_t get_mstatus(uint32_t mask)
 
 void set_mstatus(uint32_t val)
 {
-    fs = (val >> MSTATUS_FS_SHIFT) & 3;
+    mstatus_fs = (val >> MSTATUS_mstatus_fs_SHIFT) & 3;
 
-    uint32_t mask = MSTATUS_MASK & ~MSTATUS_FS;
+    uint32_t mask = MSTATUS_MASK & ~MSTATUS_mstatus_fs;
     mstatus = (mstatus & ~mask) | (val & mask);
 }
 

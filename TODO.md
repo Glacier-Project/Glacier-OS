@@ -37,5 +37,4 @@ Current goal: Developer preview 1
 
 ## Drivers (Animus)
 - Finish filesystem driver
-- Create display driver
 - Create cellular driver

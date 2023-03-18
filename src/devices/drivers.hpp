@@ -16,12 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifdef DRIVERS_H
+#ifndef DRIVERS_H
 #define DRIVERS_H
 
 #ifdef DEVICE_ANIMUS
 #include "animus/fs.hpp"
 #include "animus/clock.hpp"
+#include "animus/display.hpp"
+#include "animus/bringup.hpp"
 #endif
 
 #endif

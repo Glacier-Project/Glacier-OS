@@ -16,15 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Which device to build for
-#define DEVICE_ANIMUS
-
-// User interface
-#define UI_SERIAL_SHELL
-//#define UI_GRAPHICAL_SHELL
-
-// OS version
-#define VERSION_MAJOR 0
-#define VERSION_MINOR 0
-#define VERSION_PATCH 0
-#define API_VERSION 0
+#ifndef BRINGUP_HPP
+#define BRINGUP_HPP
+void bringup() {
+    gpio_init(25);
+    gpio_set_dir(25, GPIO_OUT);
+    gpio_put(25, 1);
+    
+    SPI.setRX(4);
+    SPI.setTX(3);
+    SPI.setSCK(2);
+    SPI.begin();
+}
+#endif

@@ -53,13 +53,13 @@ bool fs_rmdir(const char* path) {
 }
 
 bool fs_open_dir(const char* path) {
-    fs_dir = SDFS.opendir(path);
+    fs_dir = SDFS.openDir(path);
     return true;
 }
 
 bool fs_dir_next(char* buffer, int buffer_len, int* type) {
     if(fs_dir.next()) {
-        const char* filename = fs_dir.fileName();
+        const char* filename = fs_dir.fileName().c_str();
         for(int i = 0; i < buffer_len; i++) {
             if(filename[i] == '\0') {
                 break;
@@ -74,11 +74,11 @@ bool fs_dir_next(char* buffer, int buffer_len, int* type) {
 }
 
 bool fs_delete(const char* path) {
-
+    return false;
 }
 
 bool fs_rename(const char* path) {
-
+    return false;
 }
 
 void fs_seek(int offset) {
@@ -86,11 +86,11 @@ void fs_seek(int offset) {
 }
 
 int fs_position() {
-
+    return 0;
 }
 
 int fs_size() {
-
+    return 0;
 }
 
 void fs_read(char* buffer, int length) {

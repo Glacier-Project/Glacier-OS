@@ -21,6 +21,9 @@
 
 #include <stdbool.h>
 
+// Bringup functions
+void bringup();
+
 // FS functions
 #define FS_TYPE_DIRECTORY 0
 #define FS_TYPE_FILE 1
@@ -45,18 +48,44 @@ void fs_write(char* buffer, int length);
 // Display functions
 void display_init();
 void display_shutdown();
-int display_width();
-int display_height();
+uint16_t display_width();
+uint16_t display_height();
 void display_set_color(uint16_t color);
-void display_draw_pixel(int x, int y);
-void display_draw_line(int x1, int y1, int x2, int y2);
-void display_draw_rect(int x, int y, int width, int height);
-void display_fill_rect(int x, int y, int width, int height);
-void display_draw_circle(int x, int y, int r);
-void display_fill_circle(int x, int y, int r);
-void display_draw_bitmap(int x, int y, int width, int height, uint16_t data);
-void display_fill();
-void display_draw_string(int x, int y, char* text);
+void display_draw_pixel(uint16_t x, uint16_t y);
+void display_fill_rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height);
+
+void display_draw_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
+
+}
+
+void display_draw_rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height) {
+
+}
+
+void display_fill() {
+    display_fill_rect(0, 0, display_width(), display_height() + 1);
+}
+
+void display_draw_circle(uint16_t x, uint16_t y, uint16_t r) {
+
+}
+
+void display_fill_circle(uint16_t x, uint16_t y, uint16_t r) {
+
+}
+
+void display_draw_bitmap(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t data) {
+
+}
+
+void display_clear() {
+    display_set_color(0xFFFF);
+    display_fill();   
+}
+
+void display_draw_string(uint16_t x, uint16_t y, char* text) {
+
+}
 
 // UI functions
 int ui_draw_menu(char** items, int item_list_len);
