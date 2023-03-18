@@ -53,13 +53,21 @@ uint16_t display_height();
 void display_set_color(uint16_t color);
 void display_draw_pixel(uint16_t x, uint16_t y);
 void display_fill_rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height);
+void display_draw_bitmap(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t* data);
 
 void display_draw_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
-
+    if(x1 == x2) display_fill_rect(x1, y1, x1, y2 - y1);
+    else if(y1 == y2) display_fill_rect(x1, y1, x2 - x1, y1);
+    else {
+        // TODO: DDA line drawing
+    }
 }
 
 void display_draw_rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height) {
-
+    display_draw_line(x, y, x + width, y);
+    display_draw_line(x, y, x, y + height);
+    display_draw_line(x, y + height, x + width, y + height);
+    display_draw_line(x + width, y, x + width, y + height);
 }
 
 void display_fill() {
@@ -67,15 +75,11 @@ void display_fill() {
 }
 
 void display_draw_circle(uint16_t x, uint16_t y, uint16_t r) {
-
+    // TODO: this
 }
 
 void display_fill_circle(uint16_t x, uint16_t y, uint16_t r) {
-
-}
-
-void display_draw_bitmap(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t data) {
-
+    // TODO: this
 }
 
 void display_clear() {

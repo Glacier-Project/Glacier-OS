@@ -428,4 +428,23 @@ void display_fill_rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height) 
 
     animus_tft_cs_high();
 }
+
+void display_draw_bitmap(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t* data) {
+    // Push a ton of pixels
+    if(x >= ANIMUS_TFT_WIDTH || y >= ANIMUS_TFT_HEIGHT) return;
+    if(x + width >= ANIMUS_TFT_WIDTH) width = ANIMUS_TFT_WIDTH - x;
+    if(y + height >= ANIMUS_TFT_HEIGHT) height = ANIMUS_TFT_HEIGHT - y;
+
+    animus_tft_set_address(x, y, x + width, y + height);
+
+    animus_tft_cs_low();
+    animus_tft_data_mode();
+
+    for(int i = 0; i < (width * height); i++) {
+        SPI.transfer((uint8_t) (data[i] >> 8));
+        SPI.transfer((uint8_t) data[i]);
+    }
+
+    animus_tft_cs_high();
+}
 #endif
