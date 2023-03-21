@@ -87,8 +87,32 @@ void display_clear() {
     display_fill();   
 }
 
-void display_draw_string(uint16_t x, uint16_t y, char* text) {
+void display_draw_character(uint16_t x, uint16_t y, char character, uint8_t* font) {
+    uint8_t font_width = font[0];
+    uint8_t font_height = font[1];
+    uint8_t chardata = &font[2 + (font_width * font_height) + character];
+    for(int px = font_width - 1; px <= 0; px--) {
+        int dx = x + px;
+        for(int py = 0; py < font_height; py++) {
+            int dy = x + py;
+            if(chardata[py * font_width] & (0x01 << px)) display_draw_pixel(dx, dy); // TODO: idk if this will work
+        }
+    }
+}
 
+void display_draw_string(uint16_t x, uint16_t y, char* text, uint8_t* font) {
+    uint8_t font_width = font[0];
+    uint8_t font_height = font[1];
+    uint8_t dx = x;
+    uint8_t dy = y;
+    for(int i = 0; text[i] != '\0'; i++) {
+        if(text[i] == '\n') {
+            dx = x;
+            dy += font_height;
+        } else if(text[i] == '\t') {
+            dx += font_width * 4;
+        } else display_draw_character(dx, dy, text[i], font);
+    }
 }
 
 // UI functions
