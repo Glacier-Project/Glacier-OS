@@ -27,29 +27,31 @@ void setup() {
     bringup();
 
     Serial.begin();
-    //Serial.setTimeout(-1);
+    Serial.setTimeout(0xFFFF);
     Serial.println("HW init done!");
 
     Serial.print("Init modules: ");
     display_init();
     Serial.print("display ");
+    cellular_init();
+    Serial.print("cellular ");
     Serial.println();
-
-    display_set_color(0x0000);
-    display_draw_pixel(10, 10);
-}
-
-void loop() {
-    #ifdef UI_SERIAL_SHELL
-    //Serial.print(">");
-    //while(Serial.available() == 0) {}
-    //String instring = Serial.readString();
 
     display_set_color(0xFFFF);
     display_fill_rect(0, 0, 128, 160);
     display_set_color(0x0000);
     display_fill_rect(10, 10, 20, 20);
-    Serial.println("pushed");
+}
+
+void loop() {
+    #ifdef UI_SERIAL_SHELL
+    Serial.print(">");
+    while(Serial.available() == 0) {}
+    String instring = Serial.readStringUntil('\n');
+    Serial.println(instring);
+    if(!instring.compareTo("cell_model")) Serial.println(cellular_get_modem_model());
+    else if(!instring.compareTo("cell_manufacturer")) Serial.println(cellular_get_modem_manufacturer());
+    
 
     #endif
 }

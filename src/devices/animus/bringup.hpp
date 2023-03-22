@@ -27,5 +27,8 @@ void bringup() {
     SPI.setTX(3);
     SPI.setSCK(2);
     SPI.begin();
+
+    Serial1.setTX(16);
+    Serial1.setRX(17);
 }
 #endif

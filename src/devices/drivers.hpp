@@ -24,6 +24,7 @@
 #include "animus/clock.hpp"
 #include "animus/display.hpp"
 #include "animus/bringup.hpp"
+#include "animus/cellular.hpp"
 #endif
 
 #endif

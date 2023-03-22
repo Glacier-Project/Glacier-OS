@@ -119,7 +119,9 @@ void display_draw_string(uint16_t x, uint16_t y, char* text, uint8_t* font) {
 int ui_draw_menu(char** items, int item_list_len);
 
 // Communication functions
-bool cellular_available();
+String cellular_get_modem_manufacturer();
+String cellular_get_modem_model();
+int cellular_available();
 void cellular_init();
 void cellular_shutdown();
 void cellular_get_imei(char* buffer, int len);
