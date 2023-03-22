@@ -90,7 +90,7 @@ void display_clear() {
 void display_draw_character(uint16_t x, uint16_t y, char character, uint8_t* font) {
     uint8_t font_width = font[0];
     uint8_t font_height = font[1];
-    uint8_t chardata = &font[2 + (font_width * font_height) + character];
+    uint8_t* chardata = &font[2 + (font_width * font_height) + character];
     for(int px = font_width - 1; px <= 0; px--) {
         int dx = x + px;
         for(int py = 0; py < font_height; py++) {
