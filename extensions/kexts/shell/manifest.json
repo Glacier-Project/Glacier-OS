@@ -1,0 +1,4 @@
+{
+    "init_function": "",
+    "api_functions": ["void kext_shell_run();"]
+}

@@ -16,15 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef DRIVERS_H
-#define DRIVERS_H
+// https://www.robotpark.com/image/data/PRO/91579/Nokia5110.pdf
 
-#ifdef DEVICE_ANIMUS
-#include "animus/fs.hpp"
-#include "animus/clock.hpp"
-#include "animus/display.hpp"
-#include "animus/bringup.hpp"
-#include "animus/cellular.hpp"
-#endif
-
+#ifndef DISPLAY_HPP
+#define DISPLAY_HPP
+void display_init() { }
+void display_draw_pixel(int x, int y, int value) { }
+void display_shutdown();
+int display_width() { return 0; }
+int display_height() { return 0; }
+void display_clear() { }
+void display_fill_rect(int x, int y, int width, int height, int value) { }
+void display_draw_bitmap(int x, int y, int width, int height, uint8_t* data) { }
 #endif

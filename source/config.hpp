@@ -15,18 +15,5 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef SYSCALL_HPP
-#define SYSCALL_HPP
-
-#include "riscv.hpp"
-
-/*
- * Process a system call from an application.
- * See docs/syscall.md for more info
- */
-void system_call(uint32_t address) {
-    
-}
-
-#endif
+ 
+#define DEVICE_ANIMUS

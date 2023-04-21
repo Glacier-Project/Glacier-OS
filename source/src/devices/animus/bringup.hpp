@@ -18,17 +18,20 @@
 
 #ifndef BRINGUP_HPP
 #define BRINGUP_HPP
-void bringup() {
-    gpio_init(25);
-    gpio_set_dir(25, GPIO_OUT);
-    gpio_put(25, 1);
-    
-    SPI.setRX(4);
-    SPI.setTX(3);
-    SPI.setSCK(2);
-    SPI.begin();
 
+// TODO: set these
+int animus_lcd_pins[5] = {0, 0, 0, 0, 0};
+
+void bringup() {
+    // Init LCD pins
+    for(int i = 0; i < 5; i++) {
+        gpio_init(animus_lcd_pins[i]);
+        gpio_set_dir(animus_lcd_pins[i], GPIO_OUT);
+    }
+
+    // Init cellular pins
     Serial1.setTX(16);
     Serial1.setRX(17);
 }
+
 #endif

@@ -16,15 +16,35 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Which device to build for
-#define DEVICE_ANIMUS
+#include "config.hpp"
 
-// User interface
-#define UI_SERIAL_SHELL
-//#define UI_GRAPHICAL_SHELL
+#include "src/api.hpp"
+#include "src/devices/drivers.hpp"
 
-// OS version
-#define VERSION_MAJOR 0
-#define VERSION_MINOR 0
-#define VERSION_PATCH 0
-#define API_VERSION 0
+#include "src/extensions/apps.hpp"
+#include "src/extensions/kexts.hpp"
+
+void setup() {
+    bringup();
+    Serial.begin();
+    Serial.setTimeout(0xFFFF);
+    Serial.println("Initial hardware bringup OK");
+    Serial.println("Starting peripheral bringup...");
+
+    display_init();
+    Serial.println("Display bringup OK");
+
+    cellular_init();
+    Serial.println("Cellular bringup OK");
+
+    Serial.println("Running kernel extensions...");
+    kexts_init();
+    Serial.println("Completed.");
+
+    Serial.println("Welcome to Glacier OS!");
+    kext_shell_run();
+}
+
+void loop() {
+    
+}

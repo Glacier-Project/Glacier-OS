@@ -16,15 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef APP_LOADER_HPP
-#define APP_LOADER_HPP
+#ifndef BRINGUP_HPP
+#define BRINGUP_HPP
 
-#include "riscv.hpp"
-
-void load_application(const char* filename) {
-
-    pc = 0;
-    riscv_cpu_interp_x32();
-}
+void bringup() {}
 
 #endif
