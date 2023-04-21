@@ -70,7 +70,7 @@ for kext_name in os.listdir("extensions/kexts"):
         print("Including kext code...")
         try:
             with open("extensions/kexts/" + kext_name + "/" + kext_name + ".hpp") as kextfile:
-                kext_init_code += kextfile.read() + "\n"
+                kext_code += kextfile.read() + "\n"
             print("Done.")
         except:
             print("Failed to load " + kext_name + ".hpp from kext directory.")
