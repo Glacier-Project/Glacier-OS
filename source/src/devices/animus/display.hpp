@@ -22,31 +22,65 @@
 #define DISPLAY_HPP
 
 // TODO: set these
-#define ANIMUS_LCD_SCE 0
-#define ANIMUS_LCD_RESET 0
-#define ANIMUS_LCD_DC 0
-#define ANIMUS_LCD_SDIN 0
-#define ANIMUS_LCD_SCLK 0
+#define ANIMUS_LCD_SCE 1
+#define ANIMUS_LCD_RESET 5
+#define ANIMUS_LCD_DC  10
+#define ANIMUS_LCD_SDIN 3
+#define ANIMUS_LCD_SCLK 2
 
 #define ANIMUS_LCD_WIDTH 84
-#define ANIMUS_LCD_HEIGHT 5
+#define ANIMUS_LCD_HEIGHT 6
+
+#define ANIMUS_LCD_BIT_ORDER MSBFIRST
+
+#define ANIMUS_COMMAND_NOP                                          0b00000000
+#define ANIMUS_COMMAND_FUNCTION_SET                                 0b00100000
+#define ANIMUS_COMMAND_FUNCTION_SET_ACTIVE                          0b00000000
+#define ANIMUS_COMMAND_FUNCTION_SET_INACTIVE                        0b00000100
+#define ANIMUS_COMMAND_FUNCTION_SET_HORIZONTAL_ADDRESSING           0b00000000
+#define ANIMUS_COMMAND_FUNCTION_SET_VERTICAL_ADDRESSING             0b00000010
+#define ANIMUS_COMMAND_FUNCTION_SET_BASIC_ISA                       0b00000000
+#define ANIMUS_COMMAND_FUNCTION_SET_EXTENDED_ISA                    0b00000001
+#define ANIMUS_COMMAND_DISPLAY_CONTROL                              0b00001000
+#define ANIMUS_COMMAND_DISPLAY_CONTROL_BLANK                        0b00001000
+#define ANIMUS_COMMAND_DISPLAY_CONTROL_NORMAL                       0b00001100
+#define ANIMUS_COMMAND_DISPLAY_CONTROL_ALL_ON                       0b00001001
+#define ANIMUS_COMMAND_DISPLAY_CONTROL_INVERTED                     0b00001101
+#define ANIMUS_COMMAND_SET_Y_ADDRESS                                0b01000000
+#define ANIMUS_COMMAND_SET_X_ADDRESS                                0b10000000
+#define ANIMUS_COMMAND_SET_TEMPERATURE_COEFFICIENT                  0b00000100
+#define ANIMUS_COMMAND_SET_BIAS_SYSTEM                              0b00010000
+#define ANIMUS_COMMAND_SET_CONTRAST                                 0b10000000
 
 uint8_t animus_lcd_framebuffer[ANIMUS_LCD_WIDTH][ANIMUS_LCD_HEIGHT];
 
 void animus_lcd_send_command(uint8_t command) {
-    gpio_put(ANIMUS_LCD_DC, 0);
     gpio_put(ANIMUS_LCD_SCE, 0);
-    // TODO: does shiftOut work with arduino-pico?
-    shiftOut(ANIMUS_LCD_SDIN, ANIMUS_LCD_SCLK, command);
+    gpio_put(ANIMUS_LCD_DC, 0);
+    shiftOut(ANIMUS_LCD_SDIN, ANIMUS_LCD_SCLK, ANIMUS_LCD_BIT_ORDER, command);
     gpio_put(ANIMUS_LCD_SCE, 1);
 }
 
 void animus_lcd_send_data(uint8_t data) {
-    gpio_put(ANIMUS_LCD_DC, 1);
     gpio_put(ANIMUS_LCD_SCE, 0);
-    // TODO: does shiftOut work with arduino-pico?
-    shiftOut(ANIMUS_LCD_SDIN, ANIMUS_LCD_SCLK, data);
+    gpio_put(ANIMUS_LCD_DC, 1);
+    shiftOut(ANIMUS_LCD_SDIN, ANIMUS_LCD_SCLK, ANIMUS_LCD_BIT_ORDER, data);
     gpio_put(ANIMUS_LCD_SCE, 1);
+}
+
+void animus_lcd_set_address(int x, int y) {
+    if(x < 0 || x > 83 || y < 0 || y > 5) return;
+    animus_lcd_send_command(ANIMUS_COMMAND_SET_X_ADDRESS | x);
+    animus_lcd_send_command(ANIMUS_COMMAND_SET_Y_ADDRESS | y);
+}
+
+void animus_lcd_push_framebuffer() {
+    animus_lcd_set_address(0, 0);
+    for(int y = 0; y < ANIMUS_LCD_HEIGHT; y++) {
+        for(int x = 0; x < ANIMUS_LCD_WIDTH; x++) {
+            animus_lcd_send_data(animus_lcd_framebuffer[x][y]);
+        }
+    }
 }
 
 void display_init() {
@@ -56,44 +90,37 @@ void display_init() {
     gpio_put(ANIMUS_LCD_RESET, 1);
 
     // Init LCD
-    animus_lcd_send_command(0x21); // Extended commands
-    animus_lcd_send_command(0xBF); // Contrast
-    animus_lcd_send_command(0x04); // Temp. coefficient
-    animus_lcd_send_command(0x14); // LCD bias mode 1:48
-    animus_lcd_send_command(0x0C); // Normal mode
-}
+    animus_lcd_send_command(ANIMUS_COMMAND_FUNCTION_SET | ANIMUS_COMMAND_FUNCTION_SET_ACTIVE | ANIMUS_COMMAND_FUNCTION_SET_EXTENDED_ISA | ANIMUS_COMMAND_FUNCTION_SET_HORIZONTAL_ADDRESSING); // Turn on LCD and set extended instruction set
+    animus_lcd_send_command(ANIMUS_COMMAND_SET_CONTRAST | 0x3F); // Set contrast
+    animus_lcd_send_command(ANIMUS_COMMAND_FUNCTION_SET | ANIMUS_COMMAND_FUNCTION_SET_ACTIVE | ANIMUS_COMMAND_FUNCTION_SET_BASIC_ISA | ANIMUS_COMMAND_FUNCTION_SET_HORIZONTAL_ADDRESSING); // Back to basic ISA
+    animus_lcd_send_command(ANIMUS_COMMAND_DISPLAY_CONTROL | ANIMUS_COMMAND_DISPLAY_CONTROL_NORMAL);
 
-void animus_lcd_set_address(int x, int y) {
-    if(x < 0 || x > 83 || y < 0 || y > 5) return;
-    animus_lcd_send_command(0x80 | x);
-    animus_lcd_send_command(0x40 | y);
-}
+    display_clear();
 
-void animus_lcd_push_framebuffer() {
-    animus_lcd_set_address(0, 0);
-    for(int x = 0; x < ANIMUS_LCD_WIDTH; x++) {
-        for(int y = 0; y < ANIMUS_LCD_HEIGHT; y++) {
-            animus_lcd_send_data(animus_lcd_framebuffer[x][y]);
-        }
-    }
+    animus_lcd_send_data(0b11111111);
+    animus_lcd_send_data(0b11111111);
+    animus_lcd_send_data(0b11111111);
+    animus_lcd_send_data(0b00011111);
+    animus_lcd_send_data(0b00011111);
+    animus_lcd_send_data(0b00011111);
 }
 
 // TODO: Should work?
 void display_draw_pixel(int x, int y, int value) {
     if(x < 0 || x > 83 || y < 0 || y > 47) return;
-    int address_y = 4;
+    int address_y = 0;
     for(;;) {
         if(y >= 8) {
             y -= 8;
-            address_y --;
+            address_y ++;
         } else break;
     }
 
-    if(val > 1) val = 1;
-    if(val < 0) val = 0;
+    uint8_t val;
+    if(value > 1) val = 0b00000001;
+    if(value < 0) val = 0b00000000;
     animus_lcd_framebuffer[x][address_y] |= (val << y);
-    animus_lcd_set_address(x, address_y);
-    animus_lcd_send_data(animus_lcd_framebuffer[x][address_y]);
+    animus_lcd_push_framebuffer();
 }
 
 void display_shutdown();

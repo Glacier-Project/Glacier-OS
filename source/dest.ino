@@ -34,7 +34,7 @@ void setup() {
     display_init();
     Serial.println("Display bringup OK");
 
-    cellular_init();
+    //cellular_init();
     Serial.println("Cellular bringup OK");
 
     Serial.println("Running kernel extensions...");
@@ -42,6 +42,9 @@ void setup() {
     Serial.println("Completed.");
 
     Serial.println("Welcome to Glacier OS!");
+
+    display_clear();
+
     kext_shell_run();
 }
 

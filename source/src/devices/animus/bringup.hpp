@@ -20,7 +20,7 @@
 #define BRINGUP_HPP
 
 // TODO: set these
-int animus_lcd_pins[5] = {0, 0, 0, 0, 0};
+int animus_lcd_pins[5] = {1, 2, 3, 5, 10};
 
 void bringup() {
     // Init LCD pins

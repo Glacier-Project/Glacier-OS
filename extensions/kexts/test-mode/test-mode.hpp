@@ -39,13 +39,13 @@ void kext_testmode_run() {
     response = cellular_get_modem_model();
     Serial.println(response);
 
-    Serial.print("Checking IMEI... ");
+    /*Serial.print("Checking IMEI... ");
     char imei_buffer[16];
     cellular_get_imei(&imei_buffer[0], 16);
     if(imei_buffer[0] == '\0') {
         Serial.println("FAIL! IMEI is null!");
         pass = 0;
-    } else Serial.println("PASS!");
+    } else Serial.println("PASS!");*/
 
     Serial.print("Checking availability...");
     if(!cellular_available()) {

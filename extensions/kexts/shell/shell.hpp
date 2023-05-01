@@ -24,7 +24,7 @@ void kext_shell_run() {
     Serial.println(instring);
     
     // Built-in kexts
-    if(!instring.compareTo("self_test")) kext_textmode_run();
+    if(!instring.compareTo("self_test")) kext_testmode_run();
 
     // Cellular Commands
     else if(!instring.compareTo("cell_model")) Serial.println(cellular_get_modem_model());
