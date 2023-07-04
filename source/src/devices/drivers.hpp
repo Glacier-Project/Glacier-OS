@@ -26,4 +26,11 @@
 #include "animus/keypad.hpp"
 #endif
 
+#ifdef DEVICE_CODEX
+#include "codex/bringup.hpp"
+#include "codex/display.hpp"
+#include "animus/cellular.hpp"
+#include "animus/keypad.hpp"
+#endif
+
 #endif

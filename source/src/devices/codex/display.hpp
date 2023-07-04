@@ -107,20 +107,10 @@ void display_init() {
 
 void lcd_framebuffer_draw_pixel(int x, int y, int value) {
     if(x < 0 || x > 83 || y < 0 || y > 47) return;
-    int dy = display_height() - 1 - y;
-    int dx = display_width() - 1 - x;
-    int address_y = 0;
-    for(;;) {
-        if(dy >= 8) {
-            dy -= 8;
-            address_y ++;
-        } else break;
-    }
-
     uint8_t val;
     if(value > 1) val = 0b00000001;
     if(value < 0) val = 0b00000000;
-    lcd_framebuffer[dx][address_y] |= (val << dy);
+    lcd_framebuffer[x][address_y] |= (val << y);
 }
 
 void display_draw_pixel(int x, int y, int value) {

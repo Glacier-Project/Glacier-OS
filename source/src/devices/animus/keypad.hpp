@@ -16,8 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-char animus_keypad_translation[4][4] = {
-    {'L', 'A', 'E', 'R'},
+char keypad_translation[4][4] = {
+    {'C', 'O', 'D', 'U'},
     {'1', '4', '7', '*'},
     {'2', '5', '8', '0'},
     {'3', '6', '9', '#'}
@@ -25,13 +25,13 @@ char animus_keypad_translation[4][4] = {
 
 char keypad_get_key() {
     for(int out = 0; out < 4; out++) {
-        digitalWrite(animus_keypad_out_pins[out], HIGH);
+        digitalWrite(keypad_out_pins[out], HIGH);
         for(int in = 0; in < 4; in++) {
-            if(digitalRead(animus_keypad_in_pins[in]) == HIGH) {
-                return animus_keypad_translation[out][in];
+            if(digitalRead(keypad_in_pins[in]) == HIGH) {
+                return keypad_translation[out][in];
             }
         }
-        digitalWrite(animus_keypad_out_pins[out], LOW);
+        digitalWrite(keypad_out_pins[out], LOW);
     }
     return '\0';
 }

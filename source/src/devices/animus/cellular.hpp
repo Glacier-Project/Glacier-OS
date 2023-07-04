@@ -20,14 +20,14 @@
 
 #ifndef CELLULAR_HPP
 #define CELLULAR_HPP
-int animus_cellular_send_command(const char* command) {
+int cellular_send_command(const char* command) {
     Serial1.println(command);
     String response = Serial1.readString();
     if(!response.compareTo("OK")) return 0;
     return 1;
 }
 
-int animus_cellular_send_command_with_argument(const char* command, const char* argument) {
+int cellular_send_command_with_argument(const char* command, const char* argument) {
     Serial1.print(command);
     Serial1.println(argument);
     String response = Serial1.readStringUntil('\n');
@@ -35,7 +35,7 @@ int animus_cellular_send_command_with_argument(const char* command, const char* 
     return 1;
 }
 
-String animus_cellular_send_command_with_response(const char* command) {
+String cellular_send_command_with_response(const char* command) {
     Serial1.println(command);
     Serial1.readStringUntil('\n');
     String response = Serial1.readStringUntil('\n');
@@ -45,15 +45,15 @@ String animus_cellular_send_command_with_response(const char* command) {
 }
 
 String cellular_get_modem_manufacturer() {
-    return animus_cellular_send_command_with_response("AT+CGMI");
+    return cellular_send_command_with_response("AT+CGMI");
 }
 
 String cellular_get_modem_model() {
-    return animus_cellular_send_command_with_response("AT+CGMM");
+    return cellular_send_command_with_response("AT+CGMM");
 }
 
 int cellular_available() {
-    if(animus_cellular_send_command_with_response("AT+CPIN?").indexOf("READY") != -1) return 1;
+    if(cellular_send_command_with_response("AT+CPIN?").indexOf("READY") != -1) return 1;
     return 0;
 }
 
@@ -74,26 +74,26 @@ void cellular_shutdown();
 void cellular_get_imei(char* buffer, int len);
 
 void cellular_answer() {
-    animus_cellular_send_command("ATA");
+    cellular_send_command("ATA");
 }
 
 void cellular_dial(const char* number) {
-    animus_cellular_send_command("AT+CSDVC=1");
-    animus_cellular_send_command_with_argument("ATD", number);
+    cellular_send_command("AT+CSDVC=1");
+    cellular_send_command_with_argument("ATD", number);
 }
 
 void cellular_hang_up() {
-    animus_cellular_send_command("AT+CHUP");
+    cellular_send_command("AT+CHUP");
 }
 
 int cellular_enter_pin(const char* pin) {
-    return animus_cellular_send_command_with_argument("AT+CPIN=", pin);
+    return cellular_send_command_with_argument("AT+CPIN=", pin);
 }
 
 void cellular_send_dtmf(char tone) {
     char command[2] = {0, 0};
     command[0] = tone;
-    animus_cellular_send_command_with_argument("AT+VTS=", (const char*) &command[0]);
+    cellular_send_command_with_argument("AT+VTS=", (const char*) &command[0]);
 }
 
 void cellular_get_caller(char* buffer, int len);
