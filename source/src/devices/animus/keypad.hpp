@@ -16,9 +16,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef BRINGUP_HPP
-#define BRINGUP_HPP
+char animus_keypad_translation[4][4] = {
+    {'L', 'A', 'E', 'R'},
+    {'1', '4', '7', '*'},
+    {'2', '5', '8', '0'},
+    {'3', '6', '9', '#'}
+};
 
-void bringup() {}
+char keypad_get_key() {
+    for(int out = 0; out < 4; out++) {
+        digitalWrite(animus_keypad_out_pins[out], HIGH);
+        for(int in = 0; in < 4; in++) {
+            if(digitalRead(animus_keypad_in_pins[in]) == HIGH) {
+                return animus_keypad_translation[out][in];
+            }
+        }
+        digitalWrite(animus_keypad_out_pins[out], LOW);
+    }
+    return '\0';
+}
 
-#endif
+char keypad_wait_key() {
+    char in = '\0';
+    while(in == '\0') {
+        in = keypad_get_key();
+    }
+    return in;
+}

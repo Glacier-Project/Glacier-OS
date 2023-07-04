@@ -1,5 +1,4 @@
 /*
- * === This file should be populated by the generate.py script! ===
  * Glacier OS
  * Copyright (C) 2023 Johnny Stene
  * 
@@ -17,18 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef APPS_HPP
-#define APPS_HPP
-
-// Structure for an app
-typedef struct {
-    char name[8];
-    uint8_t bitmap[16][16];
-    void (*main_function)(void);
-} app_t;
-
-app_t apps[64];
-
-#define APPS_HPP_REPLACE_ME
-
+#ifdef LOCALE_EN_US
+#include "EN_US.hpp"
 #endif

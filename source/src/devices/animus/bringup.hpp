@@ -19,14 +19,27 @@
 #ifndef BRINGUP_HPP
 #define BRINGUP_HPP
 
-// TODO: set these
 int animus_lcd_pins[5] = {1, 2, 3, 5, 10};
+int animus_keypad_out_pins[4] = {6, 7, 8, 9};
+int animus_keypad_in_pins[4] = {11, 12, 13, 14};
 
 void bringup() {
     // Init LCD pins
     for(int i = 0; i < 5; i++) {
         gpio_init(animus_lcd_pins[i]);
         gpio_set_dir(animus_lcd_pins[i], GPIO_OUT);
+    }
+
+    // Init keypad pins
+    for(int i = 0; i < 4; i++) {
+        gpio_init(animus_keypad_in_pins[i]);
+        gpio_set_dir(animus_keypad_in_pins[i], GPIO_IN);
+        pinMode(animus_keypad_in_pins[i], INPUT_PULLDOWN);
+    }
+
+    for(int i = 0; i < 4; i++) {
+        gpio_init(animus_keypad_out_pins[i]);
+        gpio_set_dir(animus_keypad_out_pins[i], GPIO_OUT);
     }
 
     // Init cellular pins

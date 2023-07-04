@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-void kext_testmode_run() {
+void self_test() {
     Serial.println("Self-test starting...");
     int pass = 1;
 
@@ -57,3 +57,22 @@ void kext_testmode_run() {
     if(pass) Serial.println("Self-test passed!");
     else Serial.println("Self-test failed!");
 }
+
+void start_shell() {
+    Serial.print("\n>");
+    while(Serial.available() == 0) {}
+    String instring = Serial.readStringUntil('\n');
+    Serial.println(instring);
+    
+    // Built-in kexts
+    if(!instring.compareTo("self_test")) self_test();
+
+    // Cellular Commands
+    else if(!instring.compareTo("cell_model")) Serial.println(cellular_get_modem_model());
+    else if(!instring.compareTo("cell_manufacturer")) Serial.println(cellular_get_modem_manufacturer());
+    
+    // Illegal command message
+    else Serial.println("Illegal command");
+}
+
+

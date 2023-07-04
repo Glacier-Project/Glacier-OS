@@ -18,36 +18,45 @@
 
 #include "config.hpp"
 
+#include "src/locales/locale.hpp"
+#include "src/graphics/graphics.hpp"
+
 #include "src/api.hpp"
 #include "src/devices/drivers.hpp"
 
-#include "src/extensions/apps.hpp"
-#include "src/extensions/kexts.hpp"
+#include "LittleFS.h" // Part of arduino-pico
+
+#include "src/apps/home_screen.hpp"
+#include "src/apps/shell.hpp"
 
 void setup() {
     bringup();
-    Serial.begin();
-    Serial.setTimeout(0xFFFF);
-    Serial.println("Initial hardware bringup OK");
-    Serial.println("Starting peripheral bringup...");
 
+    // Init peripherals
     display_init();
-    Serial.println("Display bringup OK");
-
     //cellular_init();
-    Serial.println("Cellular bringup OK");
 
-    Serial.println("Running kernel extensions...");
-    kexts_init();
-    Serial.println("Completed.");
+    // Init filesystem
+    LittleFS.begin();
+    // TODO: load settings
 
-    Serial.println("Welcome to Glacier OS!");
+    // Populate application array
+    add_application_entry(&icon_messages[0], STRING_MESSAGES, &start_home_menu);
+    add_application_entry(&icon_contacts[0], STRING_CONTACTS, &start_home_menu);
+    add_application_entry(&icon_calculator[0], STRING_CALC, &start_home_menu);
+    add_application_entry(&icon_notepad[0], STRING_NOTEPAD, &start_home_menu);
+    add_application_entry(&icon_settings[0], STRING_SETTINGS, &start_home_menu);
 
+    // Start OS
     display_clear();
-
-    kext_shell_run();
+    start_home_menu();
+    shutdown();
 }
 
 void loop() {
     
+}
+
+void shutdown() {
+    LittleFS.end();
 }

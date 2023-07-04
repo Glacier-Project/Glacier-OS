@@ -17,3 +17,6 @@
  */
  
 #define DEVICE_ANIMUS
+#define LOCALE_EN_US
+
+#define MAXIMUM_APP_COUNT 16

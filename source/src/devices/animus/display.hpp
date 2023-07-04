@@ -105,13 +105,14 @@ void display_init() {
     animus_lcd_send_data(0b00011111);
 }
 
-// TODO: Should work?
-void display_draw_pixel(int x, int y, int value) {
+void animus_lcd_framebuffer_draw_pixel(int x, int y, int value) {
     if(x < 0 || x > 83 || y < 0 || y > 47) return;
+    int dy = display_height() - 1 - y;
+    int dx = display_width() - 1 - x;
     int address_y = 0;
     for(;;) {
-        if(y >= 8) {
-            y -= 8;
+        if(dy >= 8) {
+            dy -= 8;
             address_y ++;
         } else break;
     }
@@ -119,7 +120,11 @@ void display_draw_pixel(int x, int y, int value) {
     uint8_t val;
     if(value > 1) val = 0b00000001;
     if(value < 0) val = 0b00000000;
-    animus_lcd_framebuffer[x][address_y] |= (val << y);
+    animus_lcd_framebuffer[dx][address_y] |= (val << dy);
+}
+
+void display_draw_pixel(int x, int y, int value) {
+    animus_lcd_framebuffer_draw_pixel(x, y, value);
     animus_lcd_push_framebuffer();
 }
 
@@ -136,24 +141,32 @@ void display_clear() {
     animus_lcd_push_framebuffer();
 }
 
-// TODO: make these more efficient
 void display_fill_rect(int x, int y, int width, int height, int value) {
     for(int dx = 0; dx < width; dx++) {
         for(int dy = 0; dy < height; dy++) {
-            display_draw_pixel(x + dx, y + dy, value);
+            animus_lcd_framebuffer_draw_pixel(x + dx, y + dy, value);
         }
     }
+    animus_lcd_push_framebuffer();
 }
 
-// TODO: make these more efficient
 void display_draw_bitmap(int x, int y, int width, int height, uint8_t* data) {
-    int i;
     for(int dx = 0; dx < width; dx++) {
         for(int dy = 0; dy < height; dy++) {
-            display_draw_pixel(x + dx, y + dy, data[i]);
-            i ++;
+            if(data[(dy * width) + dx] == 1) animus_lcd_framebuffer_draw_pixel(x + dx, y + dy, 1);
         }
     }
+    animus_lcd_push_framebuffer();
+}
+
+void display_draw_character(int x, int y, char character, int value) {
+    char* chardata = &font8x8_basic[character][0];
+    for(int dy = 0; dy < 8; dy++) {
+        for(int dx = 0; dx < 8; dx++) {
+            if((chardata[dy] >> dx) & 0x01) animus_lcd_framebuffer_draw_pixel(x + dx, y + dy, value);
+        }
+    }
+    animus_lcd_push_framebuffer();
 }
 
 #endif

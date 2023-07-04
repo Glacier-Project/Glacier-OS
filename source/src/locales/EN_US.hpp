@@ -16,16 +16,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// https://www.robotpark.com/image/data/PRO/91579/Nokia5110.pdf
+#ifndef LOCALE
+#define LOCALE
 
-#ifndef DISPLAY_HPP
-#define DISPLAY_HPP
-void display_init() { }
-void display_draw_pixel(int x, int y, int value) { }
-void display_shutdown();
-int display_width() { return 0; }
-int display_height() { return 0; }
-void display_clear() { }
-void display_fill_rect(int x, int y, int width, int height, int value) { }
-void display_draw_bitmap(int x, int y, int width, int height, uint8_t* data) { }
+// Home menu strings
+char* STRING_OPEN =           (char*) "OPEN";
+char* STRING_EXIT =           (char*) "EXIT";
+char* STRING_DIAL =           (char*) "DIAL";
+char* STRING_MENU =           (char*) "MENU";
+char* STRING_NO_CELL =        (char*) "NO CELL";
+
+// App names
+char* STRING_MESSAGES =       (char*) "MESSAGES";
+char* STRING_CONTACTS =       (char*) "CONTACTS";
+char* STRING_CALC =           (char*) "  CALC  ";
+char* STRING_NOTEPAD =        (char*) "NOTE PAD";
+char* STRING_SETTINGS =       (char*) "SETTINGS";
+
 #endif

@@ -23,6 +23,7 @@
 #include "animus/bringup.hpp"
 #include "animus/display.hpp"
 #include "animus/cellular.hpp"
+#include "animus/keypad.hpp"
 #endif
 
 #endif

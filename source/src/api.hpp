@@ -22,29 +22,11 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+// Kernel functions
+void shutdown(); 
+
 // Bringup functions
 void bringup();
-
-// FS functions
-#define FS_TYPE_DIRECTORY 0
-#define FS_TYPE_FILE 1
-
-void fs_init();
-void fs_shutdown();
-bool fs_format();
-bool fs_open(const char* path, const char* mode);
-bool fs_exists(const char* path);
-bool fs_mkdir(const char* path);
-bool fs_rmdir(const char* path);
-bool fs_open_dir(const char* path);
-bool fs_dir_next(char* buffer, int buffer_len, int* type);
-bool fs_delete(const char* path);
-bool fs_rename(const char* path);
-void fs_seek(int offset);
-int fs_position();
-int fs_size();
-void fs_read(char* buffer, int length);
-void fs_write(char* buffer, int length);
 
 // Display functions
 void display_init();
@@ -57,8 +39,8 @@ void display_fill_rect(int x, int y, int width, int height, int value);
 void display_draw_bitmap(int x, int y, int width, int height, uint8_t* data);
 
 void display_draw_line(int x1, int y1, int x2, int y2, int value) {
-    if(x1 == x2) display_fill_rect(x1, y1, x1, y2 - y1, value);
-    else if(y1 == y2) display_fill_rect(x1, y1, x2 - x1, y1, value);
+    if(x1 == x2) display_fill_rect(x1, y1, 1, y2 - y1, value);
+    else if(y1 == y2) display_fill_rect(x1, y1, x2 - x1, 1, value);
     else {
         // TODO: DDA line drawing
     }
@@ -83,31 +65,21 @@ void display_fill_circle(int x, int y, int r, int value) {
     // TODO: this
 }
 
-void display_draw_character(int x, int y, char character, uint8_t* font, int value) {
-    uint8_t font_width = font[0];
-    uint8_t font_height = font[1];
-    uint8_t* chardata = &font[2 + (font_width * font_height) + character];
-    for(int px = font_width - 1; px <= 0; px--) {
-        int dx = x + px;
-        for(int py = 0; py < font_height; py++) {
-            int dy = x + py;
-            if(chardata[py * font_width] & (0x01 << px)) display_draw_pixel(dx, dy, value); // TODO: idk if this will work
-        }
-    }
-}
+void display_draw_character(int x, int y, char character, int value);
 
-void display_draw_string(int x, int y, char* text, uint8_t* font, int value) {
-    uint8_t font_width = font[0];
-    uint8_t font_height = font[1];
+void display_draw_string(int x, int y, char* text, int value) {
     uint8_t dx = x;
     uint8_t dy = y;
     for(int i = 0; text[i] != '\0'; i++) {
         if(text[i] == '\n') {
             dx = x;
-            dy += font_height;
+            dy += 8;
         } else if(text[i] == '\t') {
-            dx += font_width * 4;
-        } else display_draw_character(dx, dy, text[i], font, value);
+            dx += 8 * 4;
+        } else {
+            display_draw_character(dx, dy, text[i], value);
+            dx += 8;
+        }
     }
 }
 
