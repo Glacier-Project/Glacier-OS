@@ -20,41 +20,16 @@
 
 #ifndef CELLULAR_HPP
 #define CELLULAR_HPP
-int cellular_send_command(const char* command) {
-    Serial1.println(command);
-    String response = Serial1.readString();
-    if(!response.compareTo("OK")) return 0;
-    return 1;
-}
 
-int cellular_send_command_with_argument(const char* command, const char* argument) {
-    Serial1.print(command);
-    Serial1.println(argument);
-    String response = Serial1.readStringUntil('\n');
-    if(!response.compareTo("OK")) return 0;
-    return 1;
-}
+int cellular_previous_sms_count = 0;
 
-String cellular_send_command_with_response(const char* command) {
+String cellular_transmit(String command) {
     Serial1.println(command);
     Serial1.readStringUntil('\n');
     String response = Serial1.readStringUntil('\n');
     Serial1.readStringUntil('\n');
     Serial1.readStringUntil('\n');
     return response;
-}
-
-String cellular_get_modem_manufacturer() {
-    return cellular_send_command_with_response("AT+CGMI");
-}
-
-String cellular_get_modem_model() {
-    return cellular_send_command_with_response("AT+CGMM");
-}
-
-int cellular_available() {
-    if(cellular_send_command_with_response("AT+CPIN?").indexOf("READY") != -1) return 1;
-    return 0;
 }
 
 void cellular_init() {
@@ -68,35 +43,75 @@ void cellular_init() {
             break;
         }
     }
+
+    cellular_previous_sms_count = cellular_sms_get_unreceived_count();
 }
 
-void cellular_shutdown();
-void cellular_get_imei(char* buffer, int len);
-
-void cellular_answer() {
-    cellular_send_command("ATA");
+String cellular_get_manufacturer() {
+    return cellular_transmit("AT+CGMI");
 }
 
-void cellular_dial(const char* number) {
+String cellular_get_model() {
+    return cellular_transmit("AT+CGMM");
+}
+
+int cellular_available() {
+    if(cellular_transmit("AT+CPIN?").indexOf("READY") != -1) return 1;
+    return 0;
+}
+
+int cellular_sms_get_unreceived_count() {
+    String count = cellular_transmit("AT+CPMS?");
+    // todo: parse, should get count back
+} // Get the amount of SMS messages we've received
+
+void cellular_sms_get() {
+    // set to text mode
+    cellular_transmit("AT+CMGF=1");
+    cellular_transmit("AT+CSDH=1");
+
+    int count = cellular_sms_get_unreceived_count();
+    while(count > cellular_previous_sms_count) {
+        cellular_transmit("AT+CMGR=" + String(cellular_previous_sms_count + 1));
+        // todo: parse
+        //messages_show_sms(sender, contents);
+        cellular_previous_sms_count ++;
+    }
+}
+
+void cellular_sms_send(String recipient, String contents) {
+    cellular_transmit("AT+CMGF=1");
+    delay(50);
+    cellular_transmit("AT+CMGS=\"" + recipient + "\"");
+    delay(50);
+    cellular_transmit(contents);
+    delay(50);
+    Serial1.println(0x26) // TODO: maybe not println? maybe need to send this byte with above contents?
+}
+
+void cellular_sms_delete_all() {
+    cellular_transmit("AT+CMGD1,4");
+}
+
+void cellular_call_dial(String number) {
     cellular_send_command("AT+CSDVC=1");
-    cellular_send_command_with_argument("ATD", number);
+    cellular_transmit("ATD" + number);
+    cellular_state = CELLULAR_STATE_IN_CALL;
 }
 
-void cellular_hang_up() {
-    cellular_send_command("AT+CHUP");
+void cellular_call_answer() {
+    cellular_transmit("ATA");
+    cellular_state = CELLULAR_STATE_IN_CALL;
 }
 
-int cellular_enter_pin(const char* pin) {
-    return cellular_send_command_with_argument("AT+CPIN=", pin);
+void cellular_call_end() {
+    cellular_transmit("ATH")
+    cellular_state = CELLULAR_STATE_NORMAL;
 }
 
-void cellular_send_dtmf(char tone) {
-    char command[2] = {0, 0};
-    command[0] = tone;
-    cellular_send_command_with_argument("AT+VTS=", (const char*) &command[0]);
+void cellular_refresh() {
+    cellular_sms_get();
+    // TODO: check for incoming call
 }
 
-void cellular_get_caller(char* buffer, int len);
-void cellular_get_text(char* sender_buffer, int sender_len, char* message_buffer, int message_len);
-int cellular_strength() { return 0; }
 #endif

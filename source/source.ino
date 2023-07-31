@@ -18,36 +18,54 @@
 
 #include "config.hpp"
 
+#include <list>
+
+#ifndef debug
+#define debug Serial.printf
+#endif
+
+void panic(String message) {
+    debug(message.c_str());
+    for(;;) {}
+}
+
 #include "src/locales/locale.hpp"
 #include "src/graphics/graphics.hpp"
 
 #include "src/api.hpp"
 #include "src/devices/drivers.hpp"
 
-#include "LittleFS.h" // Part of arduino-pico
+//#include "LittleFS.h" // Part of arduino-pico
 
+//#include "src/apps/shell.hpp"
+#include "src/apps/dialer.hpp"
+#include "src/apps/messages.hpp"
+#include "src/apps/contacts.hpp"
 #include "src/apps/home_screen.hpp"
-#include "src/apps/shell.hpp"
 
 void setup() {
     bringup();
+    debug("Initial bringup complete.\n");
 
     // Init peripherals
+    debug("Initialising display...\n");
     display_init();
     //cellular_init();
 
     // Init filesystem
-    LittleFS.begin();
+    //LittleFS.begin();
     // TODO: load settings
 
     // Populate application array
-    add_application_entry(&icon_messages[0], STRING_MESSAGES, &start_home_menu);
-    add_application_entry(&icon_contacts[0], STRING_CONTACTS, &start_home_menu);
+    debug("Populating app entries...\n");
+    add_application_entry(&icon_messages[0], STRING_MESSAGES, &start_messages);
+    add_application_entry(&icon_contacts[0], STRING_CONTACTS, &start_contacts);
     add_application_entry(&icon_calculator[0], STRING_CALC, &start_home_menu);
     add_application_entry(&icon_notepad[0], STRING_NOTEPAD, &start_home_menu);
     add_application_entry(&icon_settings[0], STRING_SETTINGS, &start_home_menu);
 
     // Start OS
+    debug("Welcome to Glacier OS!\n");
     display_clear();
     start_home_menu();
     shutdown();
@@ -58,5 +76,5 @@ void loop() {
 }
 
 void shutdown() {
-    LittleFS.end();
+    //LittleFS.end();
 }

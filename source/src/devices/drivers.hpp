@@ -19,6 +19,12 @@
 #ifndef DRIVERS_HPP
 #define DRIVERS_HPP
 
+// Features that can be disabled. Include guards will make sure dummy drivers are the only ones that load.
+#ifndef ENABLE_CELLULAR
+#include "dummy/cellular.hpp"
+#endif
+
+// Device trees:
 #ifdef DEVICE_ANIMUS
 #include "animus/bringup.hpp"
 #include "animus/display.hpp"
@@ -31,6 +37,12 @@
 #include "codex/display.hpp"
 #include "animus/cellular.hpp"
 #include "animus/keypad.hpp"
+#endif
+
+#ifdef DEVICE_SIMULATOR
+#include "simulator/bringup.hpp"
+#include "simulator/display.hpp"
+#include "simulator/keypad.hpp"
 #endif
 
 #endif

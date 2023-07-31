@@ -16,6 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+// TODO: Should probably move this all to separate files
+
 #ifndef API_HPP
 #define API_HPP
 
@@ -27,6 +29,27 @@ void shutdown();
 
 // Bringup functions
 void bringup();
+
+// Contacts API
+typedef struct {
+    String name;
+    String number;
+    bool valid;
+} contact_t;
+
+std::list<contact_t> contacts;
+
+contact_t contact_search_name() {
+    contact_t contact;
+    contact.valid = false;
+    return contact;
+}
+
+contact_t contact_search_number() {
+    contact_t contact;
+    contact.valid = false;
+    return contact;
+}
 
 // Display functions
 void display_init();
@@ -84,16 +107,45 @@ void display_draw_string(int x, int y, char* text, int value) {
 }
 
 // Cellular functions
-String cellular_get_modem_manufacturer();
-String cellular_get_modem_model();
-int cellular_available();
+#define CELLULAR_STATE_NORMAL 0
+#define CELLULAR_STATE_RINGING 1
+#define CELLULAR_STATE_IN_CALL 2
+#define CELLULAR_STATE_ERROR 3
+
+int cellular_current_state = CELLULAR_STATE_NORMAL;
+
 void cellular_init();
-void cellular_shutdown();
-void cellular_get_imei(char* buffer, int len);
-void cellular_answer();
-void cellular_hang_up();
-void cellular_get_caller(char* buffer, int len);
-void cellular_get_text(char* sender_buffer, int sender_len, char* message_buffer, int message_len);
-int cellular_strength();
+String cellular_get_manufacturer();
+String cellular_get_model();
+int cellular_available();
+void cellular_refresh();
+void cellular_sms_send(String recipient, String contents);
+void cellular_sms_delete_all();
+void cellular_call_dial(String number);
+void cellular_call_answer();
+void cellular_call_end();
+
+// Keypad functions
+#define KEYPAD_KEY_CANCEL   0b0000000000000001
+#define KEYPAD_KEY_OK       0b0000000000000010
+#define KEYPAD_KEY_DOWN     0b0000000000000100
+#define KEYPAD_KEY_UP       0b0000000000001000
+#define KEYPAD_KEY_1        0b0000000000010000
+#define KEYPAD_KEY_2        0b0000000000100000
+#define KEYPAD_KEY_3        0b0000000001000000
+#define KEYPAD_KEY_4        0b0000000010000000
+#define KEYPAD_KEY_5        0b0000000100000000
+#define KEYPAD_KEY_6        0b0000001000000000
+#define KEYPAD_KEY_7        0b0000010000000000
+#define KEYPAD_KEY_8        0b0000100000000000
+#define KEYPAD_KEY_9        0b0001000000000000
+#define KEYPAD_KEY_ASTERISK 0b0010000000000000
+#define KEYPAD_KEY_0        0b0100000000000000
+#define KEYPAD_KEY_POUND    0b1000000000000000
+
+uint16_t key_status = 0x0000;
+void keypad_refresh();
+
+// IME functions
 
 #endif

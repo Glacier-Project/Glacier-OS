@@ -150,7 +150,7 @@ void display_draw_bitmap(int x, int y, int width, int height, uint8_t* data) {
 }
 
 void display_draw_character(int x, int y, char character, int value) {
-    char* chardata = &font8x8_basic[character][0];
+    uint8_t* chardata = &font8x8_basic[character][0];
     for(int dy = 0; dy < 8; dy++) {
         for(int dx = 0; dx < 8; dx++) {
             if((chardata[dy] >> dx) & 0x01) lcd_framebuffer_draw_pixel(x + dx, y + dy, value);

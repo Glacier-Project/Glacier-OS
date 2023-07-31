@@ -16,15 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Device-specific information
-#ifndef DEVICE_SIMULATOR // This is defined by the build script
-#define DEVICE_ANIMUS // Specifies device to use for drivers
-//#define DEVICE_CODEX // Specifies device to use for drivers
-#define ENABLE_CELLULAR // Comment to turn off cellular functionality (req'd by included apps)
-#endif
+void messages_show_sms(String sender, String contents) {
 
-// Basic OS settings
-#define LOCALE_EN_US // Language file to use
+}
 
-// Home Screen settings
-#define MAXIMUM_APP_COUNT 16 // Maximum apps that can be installed at any given time.
+void start_messages() {
+    // TODO: start contacts and get a number
+}

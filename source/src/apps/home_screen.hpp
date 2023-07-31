@@ -17,21 +17,27 @@
  */
 
 typedef struct {
-    int in_use;
-    uint8_t* icon;
-    char* name;
-    void (*start_function)();
+    int in_use; // Whether or not this entry is in use
+    uint8_t* icon; // Bitmap for the app icon
+    char* name; // Name for the app
+    void (*start_function)(); // Function to start the app
 } app_entry;
 
-app_entry apps[16];
+app_entry apps[MAXIMUM_APP_COUNT]; // Table for all registered applications
 
 void add_application_entry(uint8_t* icon, char* name, void(*start_function)()) {
+    debug("Adding app entry for \"");
+    debug(name);
+    debug("\"\n");
+
+    // Populate an app entry
     app_entry new_entry;
     new_entry.in_use = 1;
     new_entry.icon = icon;
     new_entry.name = name;
     new_entry.start_function = start_function;
     
+    // Check for a free slot
     for(int i = 0; i < MAXIMUM_APP_COUNT; i++) {
         if(apps[i].in_use == 0) {
             apps[i] = new_entry;
@@ -39,46 +45,56 @@ void add_application_entry(uint8_t* icon, char* name, void(*start_function)()) {
         }
     }
 
+    // Will only get here if there isn't enough
     panic("Not enough app slots");
 }
 
-void draw_app_screen(app_entry current_entry) {
-    display_draw_bitmap(26, 8, 32, 32, current_entry.icon);
-    display_draw_string(10, 0, current_entry.name, 1);
+void app_picker() {
+    int current_app = 0;
+    
+    for(;;) {
+        // Render screen for currently chosen app
+        display_clear();
+        display_draw_bitmap(26, 8, 32, 32, apps[current_app].icon);
+        display_draw_string(10, 0, apps[current_app].name, 1);
 
-    display_draw_string(0, display_height() - 8, STRING_OPEN, 1);
-    display_draw_string(display_width() - 32, display_height() - 8, STRING_EXIT, 1);
+        display_draw_string((display_width() / 2) - 16, display_height() - 8, STRING_OPEN, 1);
+
+        char key = keypad_wait_key();
+        switch(key) {
+            case 'D':
+                if(current_app < MAXIMUM_APP_COUNT - 1 && apps[current_app + 1].in_use) current_app++;
+                break;
+            case 'U':
+                if(current_app > 0) current_app --;
+                break;
+            case 'O':
+                apps[current_app].start_function();
+                return; // We want to drop to home screen when exiting whatever app we start
+            case 'C':
+                return; // Exit to home screen
+        }
+    }
 }
 
 void start_home_menu() {
     for(;;) {
+        // TODO: Unread message count
+        // TODO: Missed calls count
+        // TODO: Cellular strength
+        // TODO: Battery level
         display_draw_line(0, 9, display_width() - 1, 9, 1);
+        display_draw_string((display_width() / 2) - 16, display_height() - 8, STRING_MENU, 1);
 
-        int dx = 0;
-
-        // Draw cell strength
-        int strength = cellular_strength();
-        if(strength > 0) {
-            display_draw_pixel(1, 7, 1);
-
-            if(strength > 33) {
-
-            } 
-            
-            if(strength > 66) {
-
+        char key = keypad_get_key();
+        if(key != '\0') {
+            if(key == 'O') {
+                app_picker();
+            } else if(key >= '0' && key <= '9') {
+                dialer_dialpad(key);
             }
 
-            if(strength > 80) {
-
-            }
-            dx += 8;
-        } else {
-            display_draw_string(dx, 0, STRING_NO_CELL, 1);
-            dx += 8 * 7;
+            display_clear();
         }
-        
-        display_draw_string(0, display_height() - 8, STRING_MENU, 1);
-        display_draw_string(display_width() - 32, display_height() - 8, STRING_DIAL, 1);
     }
 }

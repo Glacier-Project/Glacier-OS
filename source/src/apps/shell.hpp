@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/*
 void self_test() {
     Serial.println("Self-test starting...");
     int pass = 1;
@@ -73,6 +74,4 @@ void start_shell() {
     
     // Illegal command message
     else Serial.println("Illegal command");
-}
-
-
+}*/

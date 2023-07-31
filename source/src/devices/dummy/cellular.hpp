@@ -16,15 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Device-specific information
-#ifndef DEVICE_SIMULATOR // This is defined by the build script
-#define DEVICE_ANIMUS // Specifies device to use for drivers
-//#define DEVICE_CODEX // Specifies device to use for drivers
-#define ENABLE_CELLULAR // Comment to turn off cellular functionality (req'd by included apps)
+#ifndef CELLULAR_HPP
+#define CELLULAR_HPP
+
+void cellular_init() {}
+String cellular_get_manufacturer() { return "Glacier"; }
+String cellular_get_model() { return "Dummy"; }
+int cellular_available() { return 0; }
+void cellular_refresh() {}
+void cellular_sms_send(String recipient, String contents) {}
+void cellular_sms_delete_all() {}
+void cellular_call_dial(String number) {}
+void cellular_call_answer() {}
+void cellular_call_end() {}
+
 #endif
-
-// Basic OS settings
-#define LOCALE_EN_US // Language file to use
-
-// Home Screen settings
-#define MAXIMUM_APP_COUNT 16 // Maximum apps that can be installed at any given time.

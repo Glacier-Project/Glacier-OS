@@ -16,15 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Device-specific information
-#ifndef DEVICE_SIMULATOR // This is defined by the build script
-#define DEVICE_ANIMUS // Specifies device to use for drivers
-//#define DEVICE_CODEX // Specifies device to use for drivers
-#define ENABLE_CELLULAR // Comment to turn off cellular functionality (req'd by included apps)
-#endif
+#include <cstdint>
+#include <cstddef>
+#include <string>
+#define String std::string
+#define debug printf
 
-// Basic OS settings
-#define LOCALE_EN_US // Language file to use
+#include "source.ino"
 
-// Home Screen settings
-#define MAXIMUM_APP_COUNT 16 // Maximum apps that can be installed at any given time.
+int main(int argc, char** argv) {
+
+    setup();
+
+    return 0;
+}
