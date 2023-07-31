@@ -38,7 +38,7 @@ void display_init() {
         printf("Could not initialize SDL: %s.\n", SDL_GetError());
         exit(-1);
     }
-    window = SDL_CreateWindow("Glacier OS Siulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, DISPLAY_WIDTH, DISPLAY_HEIGHT, 0);
+    window = SDL_CreateWindow("Glacier OS Simulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, DISPLAY_WIDTH, DISPLAY_HEIGHT, 0);
     renderer = SDL_CreateRenderer(window, -1, 0);
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, DISPLAY_WIDTH, DISPLAY_HEIGHT);
     pixels = (uint32_t*) malloc(DISPLAY_WIDTH * DISPLAY_HEIGHT * sizeof(uint32_t));
@@ -62,27 +62,27 @@ void window_update() {
     SDL_RenderPresent(renderer);
 }
 
-void window_set_pixel(int x, int y, int value) {
+void window_set_pixel(uint16_t x, uint16_t y, int value) {
     if(value) {
         pixels[((y * DISPLAY_WIDTH) + x)] = 255;
     } else pixels[((y * DISPLAY_WIDTH) + x)] = 0;
 }
 
-void display_draw_pixel(int x, int y, int value) {
+void display_draw_pixel(uint16_t x, uint16_t y, int value) {
     window_set_pixel(x, y, value);
     window_update();
 }
 
 void display_shutdown();
-int display_width() { return DISPLAY_WIDTH; }
-int display_height() { return DISPLAY_HEIGHT; }
+uint16_t display_width() { return DISPLAY_WIDTH; }
+uint16_t display_height() { return DISPLAY_HEIGHT; }
 
 void display_clear() {
     memset(pixels, 255, DISPLAY_WIDTH * DISPLAY_HEIGHT * sizeof(uint32_t));
     window_update();
 }
 
-void display_fill_rect(int x, int y, int width, int height, int value) {
+void display_fill_rect(uint16_t x, uint16_t y, int width, int height, int value) {
     for(int dx = 0; dx < width; dx++) {
         for(int dy = 0; dy < height; dy++) {
             window_set_pixel(x + dx, y + dy, value);
@@ -91,7 +91,7 @@ void display_fill_rect(int x, int y, int width, int height, int value) {
     window_update();
 }
 
-void display_draw_bitmap(int x, int y, int width, int height, uint8_t* data) {
+void display_draw_bitmap(uint16_t x, uint16_t y, int width, int height, uint8_t* data) {
     for(int dx = 0; dx < width; dx++) {
         for(int dy = 0; dy < height; dy++) {
             if(data[(dy * width) + dx]) window_set_pixel(x + dx, y + dy, 1);
@@ -100,7 +100,7 @@ void display_draw_bitmap(int x, int y, int width, int height, uint8_t* data) {
     window_update();
 }
 
-void display_draw_character(int x, int y, char character, int value) {
+void display_draw_character(uint16_t x, uint16_t y, char character, int value) {
     uint8_t* chardata = &font8x8_basic[character][0];
     for(int dy = 0; dy < 8; dy++) {
         for(int dx = 0; dx < 8; dx++) {

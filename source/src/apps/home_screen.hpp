@@ -19,7 +19,7 @@
 typedef struct {
     int in_use; // Whether or not this entry is in use
     uint8_t* icon; // Bitmap for the app icon
-    char* name; // Name for the app
+    String name; // Name for the app
     void (*start_function)(); // Function to start the app
 } app_entry;
 
@@ -55,9 +55,8 @@ void app_picker() {
     for(;;) {
         // Render screen for currently chosen app
         display_clear();
-        display_draw_bitmap(26, 8, 32, 32, apps[current_app].icon);
-        display_draw_string(10, 0, apps[current_app].name, 1);
-
+        display_draw_bitmap((display_width() / 2) - 16, 8 + ((display_height() - 16) / 2) - 16, 32, 32, apps[current_app].icon);
+        display_draw_string((display_width() / 2) - (apps[current_app].name.length() * 8 / 2), 0, (char*) apps[current_app].name.c_str(), 1);
         display_draw_string((display_width() / 2) - 16, display_height() - 8, STRING_OPEN, 1);
 
         char key = keypad_wait_key();
@@ -82,7 +81,7 @@ void start_home_menu() {
         display_draw_line(0, 9, display_width() - 1, 9, 1);
         display_draw_string((display_width() / 2) - 16, display_height() - 8, STRING_MENU, 1);
 
-        char key = keypad_get_key();
+        char key = keypad_wait_key();
         if(key != '\0') {
             if(key == 'O') {
                 app_picker();

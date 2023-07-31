@@ -68,7 +68,7 @@ void lcd_send_data(uint8_t data) {
     gpio_put(LCD_SCE, 1);
 }
 
-void lcd_set_address(int x, int y) {
+void lcd_set_address(uint16_t x, uint16_t y) {
     if(x < 0 || x > 83 || y < 0 || y > 5) return;
     lcd_send_command(LCD_COMMAND_SET_X_ADDRESS | x);
     lcd_send_command(LCD_COMMAND_SET_Y_ADDRESS | y);
@@ -76,8 +76,8 @@ void lcd_set_address(int x, int y) {
 
 void lcd_push_framebuffer() {
     lcd_set_address(0, 0);
-    for(int y = 0; y < LCD_HEIGHT; y++) {
-        for(int x = 0; x < LCD_WIDTH; x++) {
+    for(uint16_t y = 0; y < LCD_HEIGHT; y++) {
+        for(uint16_t x = 0; x < LCD_WIDTH; x++) {
             lcd_send_data(lcd_framebuffer[x][y]);
         }
     }
@@ -105,7 +105,7 @@ void display_init() {
     lcd_send_data(0b00011111);
 }
 
-void lcd_framebuffer_draw_pixel(int x, int y, int value) {
+void lcd_framebuffer_draw_pixel(uint16_t x, uint16_t y, int value) {
     if(x < 0 || x > 83 || y < 0 || y > 47) return;
     int dy = display_height() - 1 - y;
     int dx = display_width() - 1 - x;
@@ -123,25 +123,25 @@ void lcd_framebuffer_draw_pixel(int x, int y, int value) {
     lcd_framebuffer[dx][address_y] |= (val << dy);
 }
 
-void display_draw_pixel(int x, int y, int value) {
+void display_draw_pixel(uint16_t x, uint16_t y, int value) {
     lcd_framebuffer_draw_pixel(x, y, value);
     lcd_push_framebuffer();
 }
 
 void display_shutdown();
-int display_width() { return LCD_WIDTH; }
-int display_height() { return LCD_HEIGHT * 8; }
+uint16_t display_width() { return LCD_WIDTH; }
+uint16_t display_height() { return LCD_HEIGHT * 8; }
 
 void display_clear() {
-    for(int x = 0; x < LCD_WIDTH; x++) {
-        for(int y = 0; y < LCD_HEIGHT; y++) {
+    for(uint16_t x = 0; x < LCD_WIDTH; x++) {
+        for(uint16_t y = 0; y < LCD_HEIGHT; y++) {
             lcd_framebuffer[x][y] = 0x00;
         }
     }
     lcd_push_framebuffer();
 }
 
-void display_fill_rect(int x, int y, int width, int height, int value) {
+void display_fill_rect(uint16_t x, uint16_t y, int width, int height, int value) {
     for(int dx = 0; dx < width; dx++) {
         for(int dy = 0; dy < height; dy++) {
             lcd_framebuffer_draw_pixel(x + dx, y + dy, value);
@@ -150,7 +150,7 @@ void display_fill_rect(int x, int y, int width, int height, int value) {
     lcd_push_framebuffer();
 }
 
-void display_draw_bitmap(int x, int y, int width, int height, uint8_t* data) {
+void display_draw_bitmap(uint16_t x, uint16_t y, int width, int height, uint8_t* data) {
     for(int dx = 0; dx < width; dx++) {
         for(int dy = 0; dy < height; dy++) {
             if(data[(dy * width) + dx] == 1) lcd_framebuffer_draw_pixel(x + dx, y + dy, 1);
@@ -159,7 +159,7 @@ void display_draw_bitmap(int x, int y, int width, int height, uint8_t* data) {
     lcd_push_framebuffer();
 }
 
-void display_draw_character(int x, int y, char character, int value) {
+void display_draw_character(uint16_t x, uint16_t y, char character, int value) {
     uint8_t* chardata = &font8x8_basic[character][0];
     for(int dy = 0; dy < 8; dy++) {
         for(int dx = 0; dx < 8; dx++) {

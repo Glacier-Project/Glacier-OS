@@ -7,4 +7,7 @@ cd source
 export DISPLAY=localhost:0.0
 g++ -Wall -o ../simulator.exe simulator.c -DDEVICE_SIMULATOR `sdl2-config --cflags --libs`
 cd ..
+echo "=================================="
+echo "       Running Simulator..."
+echo "=================================="
 ./simulator.exe

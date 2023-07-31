@@ -54,14 +54,14 @@ contact_t contact_search_number() {
 // Display functions
 void display_init();
 void display_shutdown();
-int display_width();
-int display_height();
+uint16_t display_width();
+uint16_t display_height();
 void display_clear();
-void display_draw_pixel(int x, int y, int value);
-void display_fill_rect(int x, int y, int width, int height, int value);
-void display_draw_bitmap(int x, int y, int width, int height, uint8_t* data);
+void display_draw_pixel(uint16_t x, uint16_t y, int value);
+void display_fill_rect(uint16_t x, uint16_t y, int width, int height, int value);
+void display_draw_bitmap(uint16_t x, uint16_t y, int width, int height, uint8_t* data);
 
-void display_draw_line(int x1, int y1, int x2, int y2, int value) {
+void display_draw_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int value) {
     if(x1 == x2) display_fill_rect(x1, y1, 1, y2 - y1, value);
     else if(y1 == y2) display_fill_rect(x1, y1, x2 - x1, 1, value);
     else {
@@ -69,7 +69,7 @@ void display_draw_line(int x1, int y1, int x2, int y2, int value) {
     }
 }
 
-void display_draw_rect(int x, int y, int width, int height, int value) {
+void display_draw_rect(uint16_t x, uint16_t y, int width, int height, int value) {
     display_draw_line(x, y, x + width, y, value);
     display_draw_line(x, y, x, y + height, value);
     display_draw_line(x, y + height, x + width, y + height, value);
@@ -80,19 +80,19 @@ void display_fill(int value) {
     display_fill_rect(0, 0, display_width(), display_height() + 1, value);
 }
 
-void display_draw_circle(int x, int y, int r, int value) {
+void display_draw_circle(uint16_t x, uint16_t y, int r, int value) {
     // TODO: this
 }
 
-void display_fill_circle(int x, int y, int r, int value) {
+void display_fill_circle(uint16_t x, uint16_t y, int r, int value) {
     // TODO: this
 }
 
-void display_draw_character(int x, int y, char character, int value);
+void display_draw_character(uint16_t x, uint16_t y, char character, int value);
 
-void display_draw_string(int x, int y, char* text, int value) {
-    uint8_t dx = x;
-    uint8_t dy = y;
+void display_draw_string(uint16_t x, uint16_t y, char* text, int value) {
+    uint16_t dx = x;
+    uint16_t dy = y;
     for(int i = 0; text[i] != '\0'; i++) {
         if(text[i] == '\n') {
             dx = x;
