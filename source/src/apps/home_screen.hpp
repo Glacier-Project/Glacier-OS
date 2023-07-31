@@ -79,10 +79,6 @@ void app_picker() {
 
 void start_home_menu() {
     for(;;) {
-        // TODO: Unread message count
-        // TODO: Missed calls count
-        // TODO: Cellular strength
-        // TODO: Battery level
         display_draw_line(0, 9, display_width() - 1, 9, 1);
         display_draw_string((display_width() / 2) - 16, display_height() - 8, STRING_MENU, 1);
 
