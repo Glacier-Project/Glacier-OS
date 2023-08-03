@@ -79,7 +79,7 @@ void app_picker() {
 void start_home_menu() {
     for(;;) {
         debug("Entering home menu\n");
-        display_draw_line(0, 9, display_width() - 1, 9, 1);
+        display_draw_line(0, 9, display_width(), 9, 1);
         display_draw_string((display_width() / 2) - 16, display_height() - 8, STRING_MENU, 1);
 
         char key = keypad_wait_key();
