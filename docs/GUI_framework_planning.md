@@ -55,3 +55,5 @@ Just a string of text.
 Get one line of text.
 ### MultilineInput
 Get several lines of text.
+### Selector
+Select a value. Interrupt when receiving an OK character for input, and use the whole screen to draw a selection menu.
