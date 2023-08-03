@@ -1,5 +1,6 @@
 #!/bin/bash
 clear
+rm simulator.exe
 echo "=================================="
 echo " Building Glacier OS Simulator..."
 echo "=================================="

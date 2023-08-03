@@ -21,5 +21,15 @@ void messages_show_sms(String sender, String contents) {
 }
 
 void start_messages() {
-    // TODO: start contacts and get a number
+    debug("Starting messages app");
+    int chosen_contact = contact_search();
+
+    for(;;) {
+        display_clear();
+
+        char key = keypad_wait_key();
+        if(key == 'C') {
+            return;
+        }
+    }
 }

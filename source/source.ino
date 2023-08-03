@@ -18,7 +18,7 @@
 
 #include "config.hpp"
 
-#include <list>
+#include <vector>
 
 #ifndef debug
 #define debug Serial.printf
@@ -57,7 +57,10 @@ void setup() {
 
     // Init filesystem
     //LittleFS.begin();
+
+    // Load user data
     // TODO: load settings
+    load_contacts();
 
     // Populate application array
     debug("Populating app entries...\n");
@@ -70,6 +73,7 @@ void setup() {
     // Start OS
     debug("Welcome to Glacier OS!\n");
     display_clear();
+    contact_search();
     start_home_menu();
     shutdown();
 }

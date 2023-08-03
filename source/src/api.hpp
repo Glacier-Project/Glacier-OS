@@ -32,24 +32,29 @@ void bringup();
 
 // Contacts API
 typedef struct {
+    String contents;
+    bool incoming;
+} message_t;
+
+typedef struct {
+    int duration;
+    bool incoming;
+} call_t;
+
+typedef struct {
     String name;
     String number;
-    bool valid;
+    std::vector<message_t> messages;
+    std::vector<call_t> calls;
 } contact_t;
 
-std::list<contact_t> contacts;
+std::vector<contact_t> contacts;
 
-contact_t contact_search_name() {
-    contact_t contact;
-    contact.valid = false;
-    return contact;
-}
+int contact_search();
 
-contact_t contact_search_number() {
-    contact_t contact;
-    contact.valid = false;
-    return contact;
-}
+// Keypad functions
+char keypad_wait_key();
+char keypad_get_key();
 
 // Display functions
 void display_init();
@@ -106,6 +111,44 @@ void display_draw_string(uint16_t x, uint16_t y, char* text, int value) {
     }
 }
 
+// GUI toolkit
+int gui_list(String title, std::vector<String> items) {
+    debug("Showing list %s\n", title.c_str());
+    int current_selection = 0;
+
+    if(items.size() == 0) {
+        debug("List is blank, returning\n");
+        return -1;
+    }
+
+    for(;;) {
+        display_clear();
+        display_draw_string((display_width() / 2) - (title.length() * 8 / 2), 0, (char*) title.c_str(), 1);
+        display_draw_string((display_width() / 2) - 16, display_height() - 8, STRING_OPEN, 1);
+
+        display_fill_rect(0, 8, display_width(), 8, 1);
+        display_draw_string(0, 8, (char*) items.at(current_selection).c_str(), 0);
+        /*for(int i = 0; i < 2; i++) {
+            if(items.size() - current_selection - i > 0) {
+                display_draw_string(0, 16 + (8 * i), (char*) items.at(current_selection).c_str(), 1);
+            }
+        }*/
+
+        char key = keypad_wait_key();
+        if(key == 'D') {
+            if(current_selection + 1 < items.size()) {
+                current_selection ++;
+            }
+        } else if(key == 'U') {
+            if(current_selection >= 1) current_selection --;
+        } else if(key == 'O') {
+            return current_selection;
+        } else if(key == 'C') {
+            return -1;
+        }
+    }
+}
+
 // Cellular functions
 #define CELLULAR_STATE_NORMAL 0
 #define CELLULAR_STATE_RINGING 1
@@ -124,10 +167,6 @@ void cellular_sms_delete_all();
 void cellular_call_dial(String number);
 void cellular_call_answer();
 void cellular_call_end();
-
-// Keypad functions
-char keypad_wait_key();
-char keypad_get_key();
 
 // IME functions
 
