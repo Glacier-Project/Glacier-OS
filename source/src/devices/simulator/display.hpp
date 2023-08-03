@@ -65,9 +65,11 @@ void window_update() {
 }
 
 void window_set_pixel(uint16_t x, uint16_t y, int value) {
+    if(x >= display_width()) return;
+    if(y >= display_height()) return;
     if(value) {
-        pixels[((y * DISPLAY_WIDTH) + x)] = 255;
-    } else pixels[((y * DISPLAY_WIDTH) + x)] = 0;
+        pixels[((y * DISPLAY_WIDTH) + x)] = 0;
+    } else pixels[((y * DISPLAY_WIDTH) + x)] = 0xFFFFFFFF;
 }
 
 void display_draw_pixel(uint16_t x, uint16_t y, int value) {
