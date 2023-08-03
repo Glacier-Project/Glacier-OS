@@ -2,7 +2,6 @@
 
 ## Core functionality
 ### Cellular
-- Databases for messages, contacts, etc...
 - Incoming call screen
 - Ongoing call screen
 - Test cellular code
@@ -13,12 +12,31 @@
 - Cellular strength
 - Battery level
 
+### GUI Framework
+- Text entry
+- Scroll text if too long
+- Wrap text
+
+### Not Started
+- Filesystem (load/save messages, contacts, call history, and notes)
+- IME support (for triple-click, T9, etc...)
+- Global clock (for animation timing and whatnot)
+
 ### Core applications
-- Basic contacts app
-- Basic messages app
+#### Contacts
+- Allow editing contacts
+- Allow deleting contacts
+#### Messages
+- Show message history
+- Allow clearing history
+- Start new conversation
+- Incoming message display
+- "Send Message" menu
+#### Not Started
 - Basic notepad app
 - Basic settings app
 - Basic calculator app
 
 ## Simulator
 - Conect to cellular modem over USB
+- "Debug key" that allows for text prompt to run
