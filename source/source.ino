@@ -25,6 +25,7 @@
 #endif
 
 void panic(String message) {
+    debug("PANIC: ");
     debug(message.c_str());
     for(;;) {}
 }
@@ -50,7 +51,9 @@ void setup() {
     // Init peripherals
     debug("Initialising display...\n");
     display_init();
-    //cellular_init();
+    
+    debug("Initialising cellular...\n");
+    cellular_init();
 
     // Init filesystem
     //LittleFS.begin();

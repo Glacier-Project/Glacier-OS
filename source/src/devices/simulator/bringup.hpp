@@ -20,7 +20,7 @@
 #define BRINGUP_HPP
 
 void bringup() {
-    
+    debug("bringup() called\n");
 }
 
 #endif

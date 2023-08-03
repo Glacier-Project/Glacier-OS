@@ -29,6 +29,7 @@ void dialer_call(String number) {
 
 void dialer_ring(String number) {
     // TODO: display
+    debug("Ringing\n");
     bool answer = false;
 
     if(answer) {
@@ -41,6 +42,7 @@ void dialer_ring(String number) {
 }
 
 void dialer_dialpad(char start_character) {
+    debug("Starting dialpad\n");
     String number;
     if(start_character) number = number + start_character; // If we've been passed a number from the home screen, add it here
 
@@ -58,6 +60,7 @@ void dialer_dialpad(char start_character) {
         // Get keypresses
         char key = keypad_wait_key();
         if(key == 'O') { // OK is to dial
+            debug("Dialing %s\n", number.c_str());
             dialer_call(number);
             return;
         } else if(key == 'C') { // C deletes a character, or exits if the string is empty

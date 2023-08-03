@@ -34,11 +34,13 @@ SDL_Texture* texture;
 uint32_t* pixels;
 
 void display_init() {
+    debug("SDL init start\n");
     if(SDL_Init(SDL_INIT_VIDEO) == -1) {
-        printf("Could not initialize SDL: %s.\n", SDL_GetError());
+        debug("Could not initialize SDL: %s.\n", SDL_GetError());
         exit(-1);
     }
-    window = SDL_CreateWindow("Glacier OS Simulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, DISPLAY_WIDTH, DISPLAY_HEIGHT, 0);
+    debug("SDL init success\n");
+    window = SDL_CreateWindow("Glacier OS Simulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, DISPLAY_WIDTH * 4, DISPLAY_HEIGHT * 4, 0);
     renderer = SDL_CreateRenderer(window, -1, 0);
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, DISPLAY_WIDTH, DISPLAY_HEIGHT);
     pixels = (uint32_t*) malloc(DISPLAY_WIDTH * DISPLAY_HEIGHT * sizeof(uint32_t));

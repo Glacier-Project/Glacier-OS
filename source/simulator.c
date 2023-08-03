@@ -20,7 +20,7 @@
 #include <cstddef>
 #include <string>
 #define String std::string
-#define debug printf
+#define debug printf(__FILE__ ": "); printf
 
 #include "source.ino"
 

@@ -126,25 +126,8 @@ void cellular_call_answer();
 void cellular_call_end();
 
 // Keypad functions
-#define KEYPAD_KEY_CANCEL   0b0000000000000001
-#define KEYPAD_KEY_OK       0b0000000000000010
-#define KEYPAD_KEY_DOWN     0b0000000000000100
-#define KEYPAD_KEY_UP       0b0000000000001000
-#define KEYPAD_KEY_1        0b0000000000010000
-#define KEYPAD_KEY_2        0b0000000000100000
-#define KEYPAD_KEY_3        0b0000000001000000
-#define KEYPAD_KEY_4        0b0000000010000000
-#define KEYPAD_KEY_5        0b0000000100000000
-#define KEYPAD_KEY_6        0b0000001000000000
-#define KEYPAD_KEY_7        0b0000010000000000
-#define KEYPAD_KEY_8        0b0000100000000000
-#define KEYPAD_KEY_9        0b0001000000000000
-#define KEYPAD_KEY_ASTERISK 0b0010000000000000
-#define KEYPAD_KEY_0        0b0100000000000000
-#define KEYPAD_KEY_POUND    0b1000000000000000
-
-uint16_t key_status = 0x0000;
-void keypad_refresh();
+char keypad_wait_key();
+char keypad_get_key();
 
 // IME functions
 

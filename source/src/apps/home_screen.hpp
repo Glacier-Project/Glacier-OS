@@ -26,9 +26,7 @@ typedef struct {
 app_entry apps[MAXIMUM_APP_COUNT]; // Table for all registered applications
 
 void add_application_entry(uint8_t* icon, char* name, void(*start_function)()) {
-    debug("Adding app entry for \"");
-    debug(name);
-    debug("\"\n");
+    debug("Adding app entry for \"%s\"\n", name);
 
     // Populate an app entry
     app_entry new_entry;
@@ -50,9 +48,11 @@ void add_application_entry(uint8_t* icon, char* name, void(*start_function)()) {
 }
 
 void app_picker() {
+    debug("Starting app picker\n");
     int current_app = 0;
     
     for(;;) {
+        debug("Displaying app %s\n", apps[current_app].name.c_str());
         // Render screen for currently chosen app
         display_clear();
         display_draw_bitmap((display_width() / 2) - 16, 8 + ((display_height() - 16) / 2) - 16, 32, 32, apps[current_app].icon);
@@ -78,6 +78,7 @@ void app_picker() {
 
 void start_home_menu() {
     for(;;) {
+        debug("Entering home menu\n");
         display_draw_line(0, 9, display_width() - 1, 9, 1);
         display_draw_string((display_width() / 2) - 16, display_height() - 8, STRING_MENU, 1);
 

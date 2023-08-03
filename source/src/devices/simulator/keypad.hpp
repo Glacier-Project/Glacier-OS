@@ -17,6 +17,7 @@
  */
 
 char keypad_wait_key() {
+    debug("Waiting for keypress\n");
     for(;;) {
         SDL_WaitEvent(&event);
         switch(event.type) {
