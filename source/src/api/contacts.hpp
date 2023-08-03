@@ -16,19 +16,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef API_HPP
-#define API_HPP
+typedef struct {
+    String contents;
+    bool incoming;
+} message_t;
 
-#include <stdbool.h>
-#include <stdint.h>
+typedef struct {
+    int duration;
+    bool incoming;
+} call_t;
 
-#include "api/bringup.hpp"
-#include "api/kernel.hpp"
-#include "api/contacts.hpp"
-#include "api/display.hpp"
-#include "api/keypad.hpp"
-#include "api/gui.hpp"
-#include "api/cellular.hpp"
-#include "api/ime.hpp"
+typedef struct {
+    String name;
+    String number;
+    std::vector<message_t> messages;
+    std::vector<call_t> calls;
+} contact_t;
 
-#endif
+std::vector<contact_t> contacts;
+
+int contact_search();

@@ -16,19 +16,5 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef API_HPP
-#define API_HPP
-
-#include <stdbool.h>
-#include <stdint.h>
-
-#include "api/bringup.hpp"
-#include "api/kernel.hpp"
-#include "api/contacts.hpp"
-#include "api/display.hpp"
-#include "api/keypad.hpp"
-#include "api/gui.hpp"
-#include "api/cellular.hpp"
-#include "api/ime.hpp"
-
-#endif
+void shutdown();
+void panic(String message);

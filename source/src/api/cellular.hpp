@@ -16,19 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef API_HPP
-#define API_HPP
+#define CELLULAR_STATE_NORMAL 0
+#define CELLULAR_STATE_RINGING 1
+#define CELLULAR_STATE_IN_CALL 2
+#define CELLULAR_STATE_ERROR 3
 
-#include <stdbool.h>
-#include <stdint.h>
+int cellular_current_state = CELLULAR_STATE_NORMAL;
 
-#include "api/bringup.hpp"
-#include "api/kernel.hpp"
-#include "api/contacts.hpp"
-#include "api/display.hpp"
-#include "api/keypad.hpp"
-#include "api/gui.hpp"
-#include "api/cellular.hpp"
-#include "api/ime.hpp"
-
-#endif
+void cellular_init();
+String cellular_get_manufacturer();
+String cellular_get_model();
+int cellular_available();
+void cellular_refresh();
+void cellular_sms_send(String recipient, String contents);
+void cellular_sms_delete_all();
+void cellular_call_dial(String number);
+void cellular_call_answer();
+void cellular_call_end();
