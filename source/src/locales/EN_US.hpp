@@ -33,4 +33,7 @@ char* STRING_CALC =           (char*) "  CALC  ";
 char* STRING_NOTEPAD =        (char*) "NOTE PAD";
 char* STRING_SETTINGS =       (char*) "SETTINGS";
 
+// Contacts Strings
+char* STRING_NEW =            (char*) "NEW";
+
 #endif

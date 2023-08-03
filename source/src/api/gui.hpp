@@ -26,17 +26,18 @@ int gui_list(String title, std::vector<String> items) {
     }
 
     for(;;) {
+        debug("Selected item: %d\n", current_selection);
         display_clear();
         display_draw_string((display_width() / 2) - (title.length() * 8 / 2), 0, (char*) title.c_str(), 1);
         display_draw_string((display_width() / 2) - 16, display_height() - 8, STRING_OPEN, 1);
 
         display_fill_rect(0, 8, display_width(), 8, 1);
         display_draw_string(0, 8, (char*) items.at(current_selection).c_str(), 0);
-        /*for(int i = 0; i < 2; i++) {
-            if(items.size() - current_selection - i > 0) {
-                display_draw_string(0, 16 + (8 * i), (char*) items.at(current_selection).c_str(), 1);
-            }
-        }*/
+        for(int i = 0; i < 2; i++) {
+            if(items.size() - current_selection - i - 1 > 0) {
+                display_draw_string(0, 16 + (8 * i), (char*) items.at(current_selection + 1 + i).c_str(), 1);
+            } else break;
+        }
 
         char key = keypad_wait_key();
         if(key == 'D') {

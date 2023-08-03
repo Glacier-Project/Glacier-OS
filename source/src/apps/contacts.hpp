@@ -29,25 +29,38 @@ int contact_search() {
     debug("Contact picker started\n");
     std::vector<String> contact_names;
     
+    contact_names.push_back(STRING_NEW);
     for(int i = contacts.size() - 1; i >= 0; i--) {
         contact_names.push_back(contacts.at(i).name);
     }
     debug("Populated contact name list\n");
     int chosen = gui_list(STRING_CONTACTS, contact_names);
-    if(chosen == -1) {
+    if(chosen == 0) {
+        debug("Picking new contact\n");
         contact_t new_contact = create_contact();
         contacts.push_back(new_contact);
         chosen = contacts.size() - 1;
-    }
+    } else chosen --;
 
     return chosen;
 }
 
 void load_contacts() {
-    debug("Loading contacts...");
-    debug("TODO: this");
+    debug("Loading contacts...\n");
+    debug("TODO: this\n");
 }
 
 void start_contacts() {
+    debug("Running contacts app\n");
+    int chosen = contact_search();
+    if(chosen == -1) return;
     
+    for(;;) {
+        display_clear();
+        display_draw_string(0, 0, (char*) contacts.at(chosen).name.c_str(), 1);
+        display_draw_string(0, 8, (char*) contacts.at(chosen).number.c_str(), 1);
+        
+        char key = keypad_wait_key();
+        if(key == 'C') return;
+    }
 }

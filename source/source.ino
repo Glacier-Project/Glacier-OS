@@ -38,7 +38,6 @@ void panic(String message) {
 
 //#include "LittleFS.h" // Part of arduino-pico
 
-//#include "src/apps/shell.hpp"
 #include "src/apps/dialer.hpp"
 #include "src/apps/messages.hpp"
 #include "src/apps/contacts.hpp"
@@ -73,7 +72,6 @@ void setup() {
     // Start OS
     debug("Welcome to Glacier OS!\n");
     display_clear();
-    contact_search();
     start_home_menu();
     shutdown();
 }
