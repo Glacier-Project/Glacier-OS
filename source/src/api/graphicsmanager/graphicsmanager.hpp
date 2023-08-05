@@ -22,7 +22,7 @@
 
 class GraphicsObject {
 public:
-    uint32_t framebuffer[display_width() * 8];
+    uint8_t framebuffer[display_width() * 8];
     uint16_t text_scroll_speed = 1;
     uint16_t height = 0;
     uint16_t requested_height = 8;
@@ -169,7 +169,7 @@ public:
 class GUISelector : GraphicsObject {
 public:
     std::vector<String> items;
-    int selected;
+    int selected_item;
 
     bool isSelectable() {
         return true;
@@ -177,7 +177,7 @@ public:
 
     void input(char key) {
         if(key == KEY_OK) {
-            selected = gui_list("Select", items);
+            selected_item = gui_list("Select", items);
         }
     }
 
@@ -190,3 +190,72 @@ public:
     }
 
 };
+
+class GUIButton : GraphicsObject {
+public:
+    String text;
+    void (*callback)();
+
+    bool isSelectable() {
+        return true;
+    }
+
+    void input(char key) {
+        if(key == KEY_OK) {
+            callback();
+        }
+    }
+
+    void update() {
+        draw_text(0, 0, display_width(), 1, GRAPHICS_TEXT_BEHAVIOUR_SCROLL);
+        draw_vline(0, 1);
+    }
+};
+
+// GraphicsManager
+std::vector<GraphicsObject> gui_objects;
+bool gui_should_exit = false;
+
+void gui_add(GraphicsObject object) {
+    if(object.requested_height > gui_max_height()) object.height = gui_max_height();
+    else object.height = object.requested_height;
+
+    gui_objects.push_back(object);
+}
+
+void gui_enter() {
+    int current_selection = 0;
+
+    for(;;) {
+        
+
+        for(int i = 0; i < gui_objects.size(); i++) {
+            // Check if object should be selected
+            if(i == current_selection) gui_objects.at(i).selected = true;
+            else gui_objects.at(i).selected = false;
+
+            // Run update function
+            gui_objects.at(i).update();
+
+            // TODO: copy framebuffer to screen
+        }
+
+        // Get keypresses
+        // TODO: IME
+        // TODO: Check if object can be selected before selecting it
+        // TODO: Pass input to object
+        char key = keypad_wait_key();
+        if(key == 'C') break;
+        else if(key == 'U') {
+            if(current_selection > 0) current_selection--;
+        } else if(key == 'D') {
+            if(current_selection < gui_objects.size()) current_selection++;
+        } else {
+            
+        }
+    }
+}
+
+uint16_t gui_max_height() {
+    return display_height() - 8;
+}
