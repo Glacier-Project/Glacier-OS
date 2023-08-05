@@ -16,12 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#define GRAPHICS_TEXT_BEHAVIOUR_SCROLL 0
+#define GRAPHICS_TEXT_BEHAVIOUR_START 1
+#define GRAPHICS_TEXT_BEHAVIOUR_END 2
+
 class GraphicsObject {
 public:
     uint32_t framebuffer[display_width() * 8];
     uint16_t text_scroll_speed = 1;
     uint16_t height = 0;
     uint16_t requested_height = 8;
+    bool selected;
 
     void update() {
 
@@ -29,10 +34,6 @@ public:
 
     bool isSelectable() {
         return false;
-    }
-
-    void select() {
-
     }
 
     void input(char key) {
@@ -64,21 +65,28 @@ protected:
         }
     }
     
-    void draw_text(uint16_t x, uint16_t y, uint16_t width, char* text, int value) {
+    void draw_text(uint16_t x, uint16_t y, uint16_t width, char* text, int value, int behaviour) {
         // Text scroll calculations
         uint16_t starting_index = 0;
         uint16_t max_characters = width / 8;
-        if(strlen(text) > max_characters) { // See if we actually need to scroll
-            if(text_clock >= 1000) { // Wait 1s before scrolling
-                starting_index = (text_clock - 1000) / text_scroll_speed; // What position in the string we should start from
-                if(strlen(text[starting_index]) == max_characters) { // If we've reached the end,
-                    if(text_finished_time == 0) text_finished_time = text_clock; // Start counting the time since we have
-                    else if(text_clock - text_finished_time >= 1000) { // Or check to see if we need to reset
-                        starting_index = 0;
-                        text_clock = 0;
-                        text_finished_time = 0;
+
+        if(behaviour == GRAPHICS_TEXT_BEHAVIOUR_SCROLL) {
+            if(strlen(text) > max_characters) { // See if we actually need to scroll
+                if(text_clock >= 1000) { // Wait 1s before scrolling
+                    starting_index = (text_clock - 1000) / text_scroll_speed; // What position in the string we should start from
+                    if(strlen(text[starting_index]) == max_characters) { // If we've reached the end,
+                        if(text_finished_time == 0) text_finished_time = text_clock; // Start counting the time since we have
+                        else if(text_clock - text_finished_time >= 1000) { // Or check to see if we need to reset
+                            starting_index = 0;
+                            text_clock = 0;
+                            text_finished_time = 0;
+                        }
                     }
                 }
+            }
+        } else if(behaviour == GRAPHICS_TEXT_BEHAVIOUR_END) {
+            if(strlen(text) > max_characters) {
+                text += strlen(text) - max_characters;
             }
         }
 
@@ -126,6 +134,59 @@ public:
 
     void update() {
         fill(0);
-        draw_text(0, 0, display_width(), label.c_str(), 1);
+        draw_text(0, 0, display_width(), label.c_str(), 1, GRAPHICS_TEXT_BEHAVIOUR_SCROLL);
     }
+};
+
+class GUITextInput : GraphicsObject {
+public:
+    String text;
+
+    bool isSelectable() {
+        return true;
+    }
+
+    void input(char key) {
+        if(key == KEY_OK) {
+
+        } else {
+            text = text + key;
+        }
+    }
+
+    void update() {
+        draw_hline(height - 1, 1);
+        if(selected) {
+            draw_hline(0, 1);
+            draw_vline(0, 1);
+            draw_vline(display_width() - 1, 1);
+        }
+
+        draw_text(0, 0, display_width(), text.c_str(), 1, GRAPHICS_TEXT_BEHAVIOUR_END);
+    }
+};
+
+class GUISelector : GraphicsObject {
+public:
+    std::vector<String> items;
+    int selected;
+
+    bool isSelectable() {
+        return true;
+    }
+
+    void input(char key) {
+        if(key == KEY_OK) {
+            selected = gui_list("Select", items);
+        }
+    }
+
+    void update() {
+        draw_text(0, 0, display_width() - 8, 1, GRAPHICS_TEXT_BEHAVIOUR_START);
+        draw_pixel(display_width - 4, 4, 1);
+        draw_pixel(display_width - 3, 4, 1);
+        draw_pixel(display_width - 2, 4, 1);
+        draw_pixel(display_width - 3, 5, 1);
+    }
+
 };
