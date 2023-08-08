@@ -14,13 +14,19 @@
 
 ### GUI Framework
 - Text Entry
+- Make it look nicer
+
+### IME & text entry
+- Display currently selected key in corner of screen
 
 ### Not Started
 - Filesystem (load/save messages, contacts, call history, and notes)
-- IME support (for triple-click, T9, etc...)
 - Global clock (for animation timing and whatnot)
 
 ### Core applications
+#### All Applications
+- Rewrite with new GUI system
+
 #### Contacts
 - Allow editing contacts
 - Allow deleting contacts
