@@ -29,10 +29,10 @@ char keypad_wait_key() {
                 exit(0);
             case SDL_KEYDOWN:
                 switch(event.key.keysym.sym) {
-                    case SDLK_UP: return 'U';
-                    case SDLK_DOWN: return 'D';
-                    case SDLK_c: return 'C';
-                    case SDLK_o: return 'O';
+                    case SDLK_UP: return KEY_UP;
+                    case SDLK_DOWN: return KEY_DOWN;
+                    case SDLK_c: return KEY_CANCEL;
+                    case SDLK_o: return KEY_OK;
                     case SDLK_1: return '1';
                     case SDLK_2: return '2';
                     case SDLK_3: return '3';
@@ -61,10 +61,10 @@ char keypad_get_key() {
                 exit(0);
             case SDL_KEYDOWN:
                 switch(event.key.keysym.sym) {
-                    case SDLK_UP: return 'U';
-                    case SDLK_DOWN: return 'D';
-                    case SDLK_c: return 'C';
-                    case SDLK_o: return 'O';
+                    case SDLK_UP: return KEY_UP;
+                    case SDLK_DOWN: return KEY_DOWN;
+                    case SDLK_c: return KEY_CANCEL;
+                    case SDLK_o: return KEY_OK;
                     case SDLK_1: return '1';
                     case SDLK_2: return '2';
                     case SDLK_3: return '3';

@@ -61,6 +61,6 @@ void start_contacts() {
         display_draw_string(0, 8, (char*) contacts.at(chosen).number.c_str(), 1);
         
         char key = keypad_wait_key();
-        if(key == 'C') return;
+        if(key == KEY_CANCEL) return;
     }
 }

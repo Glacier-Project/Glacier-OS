@@ -61,16 +61,16 @@ void app_picker() {
 
         char key = keypad_wait_key();
         switch(key) {
-            case 'D':
+            case KEY_DOWN:
                 if(current_app < MAXIMUM_APP_COUNT - 1 && apps[current_app + 1].in_use) current_app++;
                 break;
-            case 'U':
+            case KEY_UP:
                 if(current_app > 0) current_app --;
                 break;
-            case 'O':
+            case KEY_OK:
                 apps[current_app].start_function();
                 return; // We want to drop to home screen when exiting whatever app we start
-            case 'C':
+            case KEY_CANCEL:
                 return; // Exit to home screen
         }
     }
@@ -84,7 +84,7 @@ void start_home_menu() {
 
         char key = keypad_wait_key();
         if(key != '\0') {
-            if(key == 'O') {
+            if(key == KEY_OK) {
                 app_picker();
             } else if(key >= '0' && key <= '9') {
                 dialer_dialpad(key);

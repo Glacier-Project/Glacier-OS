@@ -16,5 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#define KEY_OK      0x11
+#define KEY_CANCEL  0x12
+#define KEY_DOWN    0x13
+#define KEY_UP      0x14
+
 char keypad_wait_key();
 char keypad_get_key();

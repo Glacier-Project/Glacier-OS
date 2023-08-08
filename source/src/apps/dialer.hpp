@@ -59,11 +59,11 @@ void dialer_dialpad(char start_character) {
 
         // Get keypresses
         char key = keypad_wait_key();
-        if(key == 'O') { // OK is to dial
+        if(key == KEY_OK) { // OK is to dial
             debug("Dialing %s\n", number.c_str());
             dialer_call(number);
             return;
-        } else if(key == 'C') { // C deletes a character, or exits if the string is empty
+        } else if(key == KEY_CANCEL) { // C deletes a character, or exits if the string is empty
             if(number.length() == 0) return;
             else number.pop_back();
         } else if(key >= '0' && key <= '9') { // Add number

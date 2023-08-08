@@ -17,7 +17,7 @@
  */
 
 char keypad_translation[4][4] = {
-    {'C', 'O', 'D', 'U'},
+    {KEY_CANCEL, KEY_OK, KEY_DOWN, KEY_UP},
     {'1', '4', '7', '*'},
     {'2', '5', '8', '0'},
     {'3', '6', '9', '#'}

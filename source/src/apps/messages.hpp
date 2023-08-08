@@ -28,7 +28,7 @@ void start_messages() {
         display_clear();
 
         char key = keypad_wait_key();
-        if(key == 'C') {
+        if(key == KEY_CANCEL) {
             return;
         }
     }
