@@ -16,202 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#define GRAPHICS_TEXT_BEHAVIOUR_SCROLL 0
-#define GRAPHICS_TEXT_BEHAVIOUR_START 1
-#define GRAPHICS_TEXT_BEHAVIOUR_END 2
-
-class GraphicsObject {
-public:
-    uint8_t framebuffer[display_width() * 8];
-    uint16_t text_scroll_speed = 1;
-    uint16_t height = 0;
-    uint16_t requested_height = 8;
-    bool selected;
-
-    void update() {
-
-    }
-
-    bool isSelectable() {
-        return false;
-    }
-
-    void input(char key) {
-
-    }
-
-    void commit() {
-
-    }
-
-protected:
-    uint32_t text_clock;
-    uint32_t text_finished_time;
-
-    void draw_pixel(uint16_t x, uint16_t y, int value) {
-        if(y >= height) return;
-        if(x >= display_width()) return;
-
-        if(value) framebuffer[(y * display_width()) + x] = 0;
-        else framebuffer[(y * display_width()) + x] = 255;
-    }
-
-    void draw_character(uint16_t x, uint16_t y, char character, int value) {
-        uint8_t* chardata = &font8x8_basic[character][0];
-        for(int dy = 0; dy < 8; dy++) {
-            for(int dx = 0; dx < 8; dx++) {
-                if((chardata[dy] >> dx) & 0x01) draw_pixel(x + dx, y + dy, value);
-            }
-        }
-    }
-    
-    void draw_text(uint16_t x, uint16_t y, uint16_t width, char* text, int value, int behaviour) {
-        // Text scroll calculations
-        uint16_t starting_index = 0;
-        uint16_t max_characters = width / 8;
-
-        if(behaviour == GRAPHICS_TEXT_BEHAVIOUR_SCROLL) {
-            if(strlen(text) > max_characters) { // See if we actually need to scroll
-                if(text_clock >= 1000) { // Wait 1s before scrolling
-                    starting_index = (text_clock - 1000) / text_scroll_speed; // What position in the string we should start from
-                    if(strlen(text[starting_index]) == max_characters) { // If we've reached the end,
-                        if(text_finished_time == 0) text_finished_time = text_clock; // Start counting the time since we have
-                        else if(text_clock - text_finished_time >= 1000) { // Or check to see if we need to reset
-                            starting_index = 0;
-                            text_clock = 0;
-                            text_finished_time = 0;
-                        }
-                    }
-                }
-            }
-        } else if(behaviour == GRAPHICS_TEXT_BEHAVIOUR_END) {
-            if(strlen(text) > max_characters) {
-                text += strlen(text) - max_characters;
-            }
-        }
-
-        // String drawing function
-        uint16_t dx = x;
-        uint16_t dy = y;
-        for(int i = starting_index; text[i] != '\0'; i++) {
-            if(i >= starting_index + max_characters) return; // Make sure we're not drawing past the specified width
-            if(text[i] == '\n') {
-                dx = x;
-                dy += 8;
-            } else if(text[i] == '\t') {
-                dx += 8 * 4;
-            } else {
-                draw_character(dx, dy, text[i], value);
-                dx += 8;
-            }
-        }
-    }
-
-    void draw_hline(uint16_t y, int value) {
-        for(int x = 0; x < display_width(); x++) {
-            draw_pixel(x, y, value);
-        }
-    }
-
-    void draw_vline(uint16_t x, int value) {
-        for(int y = 0; y < height; y++) {
-            draw_pixel(x, y, value);
-        }
-    }
-
-    void fill(int value) { 
-        for(int x = 0; x < display_width(); x++) {
-            for(int y = 0; y < height; y++) {
-                draw_pixel(x, y, value);
-            }
-        }
-    }
-};
-
-class GUILabel : GraphicsObject {
-public:
-    String label;
-
-    void update() {
-        fill(0);
-        draw_text(0, 0, display_width(), label.c_str(), 1, GRAPHICS_TEXT_BEHAVIOUR_SCROLL);
-    }
-};
-
-class GUITextInput : GraphicsObject {
-public:
-    String text;
-
-    bool isSelectable() {
-        return true;
-    }
-
-    void input(char key) {
-        if(key == KEY_OK) {
-
-        } else {
-            text = text + key;
-        }
-    }
-
-    void update() {
-        draw_hline(height - 1, 1);
-        if(selected) {
-            draw_hline(0, 1);
-            draw_vline(0, 1);
-            draw_vline(display_width() - 1, 1);
-        }
-
-        draw_text(0, 0, display_width(), text.c_str(), 1, GRAPHICS_TEXT_BEHAVIOUR_END);
-    }
-};
-
-class GUISelector : GraphicsObject {
-public:
-    std::vector<String> items;
-    int selected_item;
-
-    bool isSelectable() {
-        return true;
-    }
-
-    void input(char key) {
-        if(key == KEY_OK) {
-            selected_item = gui_list("Select", items);
-        }
-    }
-
-    void update() {
-        draw_text(0, 0, display_width() - 8, 1, GRAPHICS_TEXT_BEHAVIOUR_START);
-        draw_pixel(display_width - 4, 4, 1);
-        draw_pixel(display_width - 3, 4, 1);
-        draw_pixel(display_width - 2, 4, 1);
-        draw_pixel(display_width - 3, 5, 1);
-    }
-
-};
-
-class GUIButton : GraphicsObject {
-public:
-    String text;
-    void (*callback)();
-
-    bool isSelectable() {
-        return true;
-    }
-
-    void input(char key) {
-        if(key == KEY_OK) {
-            callback();
-        }
-    }
-
-    void update() {
-        draw_text(0, 0, display_width(), 1, GRAPHICS_TEXT_BEHAVIOUR_SCROLL);
-        draw_vline(0, 1);
-    }
-};
-
 // GraphicsManager
 std::vector<GraphicsObject> gui_objects;
 bool gui_should_exit = false;
@@ -221,6 +25,44 @@ void gui_add(GraphicsObject object) {
     else object.height = object.requested_height;
 
     gui_objects.push_back(object);
+}
+
+int gui_list(String title, std::vector<String> items) {
+    debug("Showing list %s\n", title.c_str());
+    int current_selection = 0;
+
+    if(items.size() == 0) {
+        debug("List is blank, returning\n");
+        return -1;
+    }
+
+    for(;;) {
+        debug("Selected item: %d\n", current_selection);
+        display_clear();
+        display_draw_string((display_width() / 2) - (title.length() * 8 / 2), 0, (char*) title.c_str(), 1);
+        display_draw_string((display_width() / 2) - 16, display_height() - 8, STRING_OPEN, 1);
+
+        display_fill_rect(0, 8, display_width(), 8, 1);
+        display_draw_string(0, 8, (char*) items.at(current_selection).c_str(), 0);
+        for(int i = 0; i < 2; i++) {
+            if(items.size() - current_selection - i - 1 > 0) {
+                display_draw_string(0, 16 + (8 * i), (char*) items.at(current_selection + 1 + i).c_str(), 1);
+            } else break;
+        }
+
+        char key = keypad_wait_key();
+        if(key == 'D') {
+            if(current_selection + 1 < items.size()) {
+                current_selection ++;
+            }
+        } else if(key == 'U') {
+            if(current_selection >= 1) current_selection --;
+        } else if(key == 'O') {
+            return current_selection;
+        } else if(key == 'C') {
+            return -1;
+        }
+    }
 }
 
 void gui_enter() {
