@@ -41,7 +41,7 @@ public:
     }
 
 protected:
-    uint32_t text_clock;
+    uint32_t text_clock; // TODO: increment this
     uint32_t text_finished_time;
 
     void draw_pixel(uint16_t x, uint16_t y, int value) {
