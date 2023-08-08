@@ -31,6 +31,11 @@ public:
         for(;;) {
             char key = keypad_get_key();
             if(key != '\0') {
+                if(key == KEY_CANCEL || key == KEY_OK || key == KEY_DOWN || key == KEY_UP) {
+                    return key;
+                }
+
+                last_keypress_time = global_timer;
                 if(key == last_pressed_key) {
                     current_cycle_pos ++;
                     if(get_key == '\0') current_cycle_pos = 0;
@@ -40,6 +45,8 @@ public:
                 }
             } else if(global_timer - last_keypress_time > 1000) {
                 char translated = get_key();
+                current_cycle_pos = 0;
+                last_pressed_key = '\0';
                 if(translated != '\0') return translated;
             }
         }
