@@ -51,15 +51,15 @@ int gui_list(String title, std::vector<String> items) {
         }
 
         char key = keypad_wait_key();
-        if(key == 'D') {
+        if(key == KEY_DOWN) {
             if(current_selection + 1 < items.size()) {
                 current_selection ++;
             }
-        } else if(key == 'U') {
+        } else if(key == KEY_UP) {
             if(current_selection >= 1) current_selection --;
-        } else if(key == 'O') {
+        } else if(key == KEY_OK) {
             return current_selection;
-        } else if(key == 'C') {
+        } else if(key == KEY_CANCEL) {
             return -1;
         }
     }
@@ -87,10 +87,10 @@ void gui_enter() {
         // TODO: Check if object can be selected before selecting it
         // TODO: Pass input to object
         char key = keypad_wait_key();
-        if(key == 'C') break;
-        else if(key == 'U') {
+        if(key == KEY_CANCEL) break;
+        else if(key == KEY_UP) {
             if(current_selection > 0) current_selection--;
-        } else if(key == 'D') {
+        } else if(key == KEY_DOWN) {
             if(current_selection < gui_objects.size()) current_selection++;
         } else {
             

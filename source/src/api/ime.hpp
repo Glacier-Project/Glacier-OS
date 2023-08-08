@@ -84,3 +84,7 @@ protected:
 };
 
 IME current_ime;
+
+void ime_init() {
+    current_ime = IME_TripleClick();
+}

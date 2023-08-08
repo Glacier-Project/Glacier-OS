@@ -69,6 +69,10 @@ void setup() {
     add_application_entry(&icon_notepad[0], STRING_NOTEPAD, &start_home_menu);
     add_application_entry(&icon_settings[0], STRING_SETTINGS, &start_home_menu);
 
+    // Start IME
+    debug("Creating Input Method Editor...\n");
+    ime_init();
+
     // Start OS
     debug("Welcome to Glacier OS!\n");
     display_clear();
