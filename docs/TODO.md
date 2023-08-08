@@ -13,9 +13,7 @@
 - Battery level
 
 ### GUI Framework
-- Text entry
-- Scroll text if too long
-- Wrap text
+- Text Entry
 
 ### Not Started
 - Filesystem (load/save messages, contacts, call history, and notes)
