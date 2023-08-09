@@ -18,9 +18,7 @@
 
 class IME {
 public:
-    char ime_wait_keypress() {
-
-    }
+    virtual char ime_wait_keypress() = 0;
 protected:
     uint32_t last_keypress_time;
 };

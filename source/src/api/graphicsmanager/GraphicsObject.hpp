@@ -24,20 +24,12 @@ public:
     uint16_t requested_height = 8;
     bool selected;
 
-    void update() {
-
-    }
+    virtual void update() = 0;
+    virtual void input(char key) = 0;
+    virtual void commit() = 0;
 
     bool isSelectable() {
         return false;
-    }
-
-    void input(char key) {
-
-    }
-
-    void commit() {
-
     }
 
 protected:
