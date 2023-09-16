@@ -23,7 +23,7 @@ char keypad_translation[4][4] = {
     {'3', '6', '9', '#'}
 };
 
-char keypad_get_key() {
+char keypad_get_char() {
     for(int out = 0; out < 4; out++) {
         digitalWrite(keypad_out_pins[out], HIGH);
         for(int in = 0; in < 4; in++) {
@@ -34,14 +34,6 @@ char keypad_get_key() {
         digitalWrite(keypad_out_pins[out], LOW);
     }
     return '\0';
-}
-
-char keypad_wait_key() {
-    char in = '\0';
-    while(in == '\0') {
-        in = keypad_get_key();
-    }
-    return in;
 }
 
 /*

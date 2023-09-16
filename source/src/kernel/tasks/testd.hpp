@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-static void testd() {
+void testd(void*) {
     for(;;) {
         dprintf("Testd running\n");
     }

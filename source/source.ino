@@ -17,17 +17,25 @@
  */
 
 #include "config.hpp"
-#include "src/device_trees/drivers.hpp"
+#include "src/graphics/graphics.hpp"
 
 // Kernel code
 #include <FreeRTOS.h>
+#include <task.h>
+#include "api.hpp"
 #include "src/kernel/display.hpp"
 #include "src/kernel/keypad.hpp"
 #include "src/kernel/debug.hpp"
+#include "src/kernel/multitasking.hpp"
+
 #include "src/kernel/tasks/testd.hpp"
+#include "src/kernel/tasks/monitord.hpp"
+
+#include "src/device_trees/drivers.hpp"
 
 void setup() {
-    Serial.init(9600);
+    Serial.begin(9600);
+    Serial.ignoreFlowControl(true);
     dprintf("Glacier OS!\n");
 
     // Do hardware init
@@ -36,7 +44,10 @@ void setup() {
 
     // Do FreeRTOS init
     dprintf("Tasks init START\n");
-    xTaskCreate(testd, "testd", 100, NULL, 0, NULL);
+    multitasking_init();
+
+    spawn_process("testd", testd, 0);
+    spawn_process("monitord", monitord, 7);
 }
 
 void loop() {

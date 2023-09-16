@@ -16,35 +16,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef DRIVERS_HPP
-#define DRIVERS_HPP
+void monitord(void*) {
+    // General system cleanup
+    multitasking_cleanup();
 
-void bringup();
+    // Check for new keypad input
+    for(int pulse = 0; pulse < 16; pulse++) {
+        digitalWrite(current_button_matrix.pulse_pins[pulse], LOW);
+        for(int sense = 0; sense < 16; sense++) {
+            if(digitalRead(current_button_matrix.sense_pins[sense]) == HIGH) {
+                pressed[(int) current_button_matrix.values[pulse][sense]] ++;
+            } else {
+                pressed[(int) current_button_matrix.values[pulse][sense]] = 0;
+            }
+        }
+        digitalWrite(current_button_matrix.pulse_pins[pulse], HIGH);
+    }
 
-// Features that can be disabled. Include guards will make sure dummy drivers are the only ones that load.
-#ifndef ENABLE_CELLULAR
-#include "dummy/cellular.hpp"
-#endif
-
-// Device trees:
-#ifdef DEVICE_ANIMUS
-#include "animus/bringup.hpp"
-#include "animus/display.hpp"
-//#include "animus/cellular.hpp"
-//#include "animus/keypad.hpp"
-#endif
-
-#ifdef DEVICE_CODEX
-#include "codex/bringup.hpp"
-#include "codex/display.hpp"
-#include "animus/cellular.hpp"
-#include "animus/keypad.hpp"
-#endif
-
-#ifdef DEVICE_SIMULATOR
-#include "simulator/bringup.hpp"
-#include "simulator/display.hpp"
-#include "simulator/keypad.hpp"
-#endif
-
-#endif
+    vTaskDelay(10 / portTICK_PERIOD_MS);
+}

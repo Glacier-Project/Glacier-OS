@@ -23,6 +23,9 @@
 #define ENABLE_CELLULAR // Comment to turn off cellular functionality (req'd by included apps)
 #endif
 
+// Kernel settings
+#define MAXIMUM_PROCESS_COUNT 64
+
 // Basic OS settings
 #define LOCALE_EN_US // Language file to use
 
