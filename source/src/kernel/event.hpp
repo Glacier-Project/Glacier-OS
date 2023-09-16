@@ -16,9 +16,4 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-class ButtonMatrix {
-    // TODO: this
-};
-
-char keypad_get_char();
-char keypad_wait_char();
+// TODO: make an event system

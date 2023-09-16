@@ -22,9 +22,18 @@
 // Kernel code
 #include "src/kernel/display.hpp"
 #include "src/kernel/keypad.hpp"
+#include "src/kernel/debug.hpp"
 
 void setup() {
+    Serial.init(9600);
+    dprintf("Glacier OS!\n");
 
+    // Do hardware init
+    dprintf("Display init START");
+    display_init();
+
+    // Enter userspace
+    kpanic("Userspace not implemented")
 }
 
 void loop() {

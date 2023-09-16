@@ -16,9 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-class ButtonMatrix {
-    // TODO: this
-};
+#define dprintf Serial.printf(__FILE__ ": "); Serial.printf
+#define kpanic Serial.printf(__FILE__ ": KERNEL PANIC! "); Serial.printf
 
-char keypad_get_char();
-char keypad_wait_char();
+void panic() {
+    // TODO: shutdown all multitasking and irqs first
+    for(;;) {}
+}
