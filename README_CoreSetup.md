@@ -8,8 +8,8 @@ High Priority tasks are req'd for a functional "minimum-viable" system.
 - Figure out why serial console hasn't been working
 - Get button I/O (including a robust matrix setup) working well
 - Finish writing display API
-- Event system
-- Get multitasking working
+- Event system (https://freertos.org/RTOS-task-notifications.html)
+- (STARTED) Get multitasking working
 
 ### Medium Priority
 Medium Priority tasks are what add the required functionality for a mobile OS

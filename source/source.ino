@@ -20,20 +20,23 @@
 #include "src/device_trees/drivers.hpp"
 
 // Kernel code
+#include <FreeRTOS.h>
 #include "src/kernel/display.hpp"
 #include "src/kernel/keypad.hpp"
 #include "src/kernel/debug.hpp"
+#include "src/kernel/tasks/testd.hpp"
 
 void setup() {
     Serial.init(9600);
     dprintf("Glacier OS!\n");
 
     // Do hardware init
-    dprintf("Display init START");
+    dprintf("Display init START\n");
     display_init();
 
-    // Enter userspace
-    kpanic("Userspace not implemented")
+    // Do FreeRTOS init
+    dprintf("Tasks init START\n");
+    xTaskCreate(testd, "testd", 100, NULL, 0, NULL);
 }
 
 void loop() {
