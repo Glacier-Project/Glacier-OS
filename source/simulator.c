@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#ifdef SIMULATOR
 #include <cstdint>
 #include <cstddef>
 #include <string>
@@ -30,3 +31,4 @@ int main(int argc, char** argv) {
 
     return 0;
 }
+#endif

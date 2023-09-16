@@ -16,10 +16,4 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#define GRAPHICS_TEXT_BEHAVIOUR_SCROLL 0
-#define GRAPHICS_TEXT_BEHAVIOUR_START 1
-#define GRAPHICS_TEXT_BEHAVIOUR_END 2
-
-#include "graphicsmanager/GraphicsObject.hpp"
-#include "graphicsmanager/GraphicsManager.hpp"
-#include "graphicsmanager/GUIElements.hpp"
+uint64_t global_timer = 0;

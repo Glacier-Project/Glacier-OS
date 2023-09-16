@@ -18,12 +18,12 @@
 
 class IME {
 public:
-    virtual char ime_wait_keypress() = 0;
+    char ime_wait_keypress();
 protected:
     uint32_t last_keypress_time;
 };
 
-class IME_TripleClick : IME {
+class IME_TripleClick : public IME {
 public:
     char ime_wait_keypress() {
         for(;;) {
@@ -36,7 +36,7 @@ public:
                 last_keypress_time = global_timer;
                 if(key == last_pressed_key) {
                     current_cycle_pos ++;
-                    if(get_key == '\0') current_cycle_pos = 0;
+                    if(get_key() == '\0') current_cycle_pos = 0;
                 } else {
                     current_cycle_pos = 0;
                     last_pressed_key = key;

@@ -23,6 +23,20 @@
 
 int cellular_previous_sms_count = 0;
 
+String cellular_transmit(String command);
+void cellular_init();
+String cellular_get_manufacturer();
+String cellular_get_model();
+int cellular_available();
+int cellular_sms_get_unreceived_count();
+void cellular_sms_get();
+void cellular_sms_send(String recipient, String contents);
+void cellular_sms_delete_all();
+void cellular_call_dial(String number);
+void cellular_call_answer();
+void cellular_call_end();
+void cellular_refresh();
+
 String cellular_transmit(String command) {
     Serial1.println(command);
     Serial1.readStringUntil('\n');

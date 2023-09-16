@@ -22,12 +22,12 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "api/timer.hpp"
 #include "api/bringup.hpp"
 #include "api/kernel.hpp"
 #include "api/contacts.hpp"
 #include "api/display.hpp"
 #include "api/keypad.hpp"
-#include "api/gui.hpp"
 #include "api/cellular.hpp"
 #include "api/ime.hpp"
 
