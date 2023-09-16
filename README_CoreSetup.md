@@ -4,7 +4,7 @@ The goal for this branch is to get the core functionality of Glacier OS working,
 ## CoreSetup TODO
 ### High Priority
 High Priority tasks are req'd for a functional "minimum-viable" system.
-- Separate kernel and userspace code for a more modular design
+- (STARTED) Separate kernel and userspace code for a more modular design
 - Figure out why serial console hasn't been working
 - Get button I/O (including a robust matrix setup) working well
 - Finish writing display API

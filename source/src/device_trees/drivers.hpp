@@ -16,5 +16,35 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-void shutdown();
-void panic(String message);
+#ifndef DRIVERS_HPP
+#define DRIVERS_HPP
+
+void bringup();
+
+// Features that can be disabled. Include guards will make sure dummy drivers are the only ones that load.
+#ifndef ENABLE_CELLULAR
+#include "dummy/cellular.hpp"
+#endif
+
+// Device trees:
+#ifdef DEVICE_ANIMUS
+#include "animus/bringup.hpp"
+#include "animus/display.hpp"
+#include "animus/cellular.hpp"
+#include "animus/keypad.hpp"
+#endif
+
+#ifdef DEVICE_CODEX
+#include "codex/bringup.hpp"
+#include "codex/display.hpp"
+#include "animus/cellular.hpp"
+#include "animus/keypad.hpp"
+#endif
+
+#ifdef DEVICE_SIMULATOR
+#include "simulator/bringup.hpp"
+#include "simulator/display.hpp"
+#include "simulator/keypad.hpp"
+#endif
+
+#endif
